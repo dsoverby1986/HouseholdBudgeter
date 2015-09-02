@@ -16,6 +16,11 @@ using Microsoft.Owin.Security.OAuth;
 using HouseholdBudgeter.Models;
 using HouseholdBudgeter.Providers;
 using HouseholdBudgeter.Results;
+using System.Linq;
+using System.Web.Http.Description;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Net;
 
 namespace HouseholdBudgeter.Controllers
 {
@@ -23,6 +28,8 @@ namespace HouseholdBudgeter.Controllers
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
+        ApplicationDbContext db = new ApplicationDbContext();
+
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 
@@ -371,6 +378,106 @@ namespace HouseholdBudgeter.Controllers
                 return GetErrorResult(result); 
             }
             return Ok();
+        }
+
+        // GET: api/Households
+        [Route("HouseHolds")]
+        [AllowAnonymous]
+        public IQueryable<Household> GetHouseholds()
+        {
+            return db.Households;
+        }
+
+        // GET: api/Households/5
+        [Route("Household")]
+        [ResponseType(typeof(Household))]
+        public async Task<IHttpActionResult> GetHousehold(int id)
+        {
+            Household household = await db.Households.FindAsync(id);
+            if (household == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(household);
+        }
+
+        // PUT: api/Households/5
+        /*[ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutHousehold(int id, Household household)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != household.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(household).State = EntityState.Modified;
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!HouseholdExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }*/
+
+        // POST: api/Households
+        [Route("CreateHousehold")]
+        [AllowAnonymous]
+        [ResponseType(typeof(Household))]
+        public async Task<IHttpActionResult> PostHousehold(string name)
+        {
+            Household household = new Household()
+            {
+                Name = name
+            };
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.Households.Add(household);
+            await db.SaveChangesAsync();
+
+            return Ok(household);
+        }
+
+        // DELETE: api/Households/5
+        [ResponseType(typeof(Household))]
+        public async Task<IHttpActionResult> DeleteHousehold(int id)
+        {
+            Household household = await db.Households.FindAsync(id);
+            if (household == null)
+            {
+                return NotFound();
+            }
+
+            db.Households.Remove(household);
+            await db.SaveChangesAsync();
+
+            return Ok(household);
+        }
+
+        private bool HouseholdExists(int id)
+        {
+            return db.Households.Count(e => e.Id == id) > 0;
         }
 
         protected override void Dispose(bool disposing)

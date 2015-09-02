@@ -24,6 +24,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // GET: api/Accounts/5
+        [Route("GetAccount")]
+        [AllowAnonymous]
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> GetAccount(int id)
         {
@@ -37,6 +39,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // PUT: api/Accounts/5
+        [Route("EditAccount")]
+        [AllowAnonymous]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutAccount(int id, Account account)
         {
@@ -72,6 +76,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // POST: api/Accounts
+        [Route("CreateAccount")]
+        [AllowAnonymous]
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PostAccount(Account account)
         {

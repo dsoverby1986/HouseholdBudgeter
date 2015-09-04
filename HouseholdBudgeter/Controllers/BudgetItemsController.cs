@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Microsoft.AspNet.Identity;
 
 namespace HouseholdBudgeter.Models
 {
@@ -78,6 +79,8 @@ namespace HouseholdBudgeter.Models
             {
                 return BadRequest(ModelState);
             }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
 
             db.BudgetItems.Add(budgetItem);
             await db.SaveChangesAsync();

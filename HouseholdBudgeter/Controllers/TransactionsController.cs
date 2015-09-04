@@ -10,17 +10,45 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using HouseholdBudgeter.Models;
+using Microsoft.AspNet.Identity;
 
 namespace HouseholdBudgeter.Controllers
 {
+    [RoutePrefix("api/Transactions")]
+    [Authorize]
     public class TransactionsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Transactions
-        public IQueryable<Transaction> GetTransactions()
+        public IHttpActionResult GetTransactions(int id)
         {
-            return db.Transactions;
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var accountIsHad = user.Household.Accounts.Any(a => a.Id == id);
+
+            if (!accountIsHad)
+            {
+                return Ok("You do not have permission to view these transactions.");
+            }
+
+            var account = db.Accounts.Find(id);
+            var transList = account.Transactions.ToList();
+
+            return Ok(transList);
+            
+        }
+
+        [Route("TransByCategory")]
+        public IHttpActionResult TransByCategory(int accountId, int catId)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var allTransList = user.Household.Accounts.Where(a => a.Id == accountId).SelectMany(a => a.Transactions);
+
+            var transList = allTransList.Where(t => t.CategoryId == catId);
+
+            return Ok(transList);
         }
 
         // GET: api/Transactions/5
@@ -35,55 +63,76 @@ namespace HouseholdBudgeter.Controllers
 
             return Ok(transaction);
         }
-
+         
         // PUT: api/Transactions/5
+        [Route("EditTransaction")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutTransaction(int id, Transaction transaction)
+        public async Task<IHttpActionResult> PutTransaction(int id, string description/*, string status*/, decimal? amount, int? catId, bool? rec)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != transaction.Id)
-            {
+            var trans = db.Transactions.Find(id);
+
+            if (id != trans.Id)
+            { 
                 return BadRequest();
             }
 
-            db.Entry(transaction).State = EntityState.Modified;
-
-            try
+            if (!string.IsNullOrWhiteSpace(description))
             {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                trans.Description = description;
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            /*if(!string.IsNullOrWhiteSpace(status))
+            {
+                trans.Status = status;
+            }*/
+
+            if (amount != null)
+            {
+                trans.Account.Balance -= trans.Amount;
+                trans.Amount = (decimal)amount;
+                trans.Account.Balance += (decimal)amount;
+            }
+
+            if(catId != null)
+            {
+                trans.CategoryId = (int)catId;
+            }
+
+            if(trans.Reconciled != rec)
+            {
+                trans.Reconciled = (bool)rec;
+            }
+
+            trans.Updated = DateTimeOffset.Now;
+
+            await db.SaveChangesAsync();
+
+            return Ok(trans);
         }
 
         // POST: api/Transactions
         [ResponseType(typeof(Transaction))]
-        public async Task<IHttpActionResult> PostTransaction(Transaction transaction)
+        public async Task<IHttpActionResult> PostTransaction(Transaction trans)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Transactions.Add(transaction);
+            trans.Created = DateTimeOffset.Now;
+            db.Transactions.Add(trans);
+            var account = db.Accounts.Find(trans.AccountId);
+            account.Balance = account.Balance + trans.Amount;
+
+            db.Transactions.Add(trans);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = transaction.Id }, transaction);
+            return Ok(trans);
         }
 
         // DELETE: api/Transactions/5
@@ -91,11 +140,16 @@ namespace HouseholdBudgeter.Controllers
         public async Task<IHttpActionResult> DeleteTransaction(int id)
         {
             Transaction transaction = await db.Transactions.FindAsync(id);
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == id);
+
             if (transaction == null)
             {
                 return NotFound();
             }
 
+            account.Balance -= transaction.Amount;
+            
             db.Transactions.Remove(transaction);
             await db.SaveChangesAsync();
 

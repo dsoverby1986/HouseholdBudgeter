@@ -12,6 +12,7 @@ namespace HouseholdBudgeter.Models
         public int HouseHoldId { get; set; }
         public int CategoryId { get; set; }
         public int Frequency { get; set; }
+        public string Name { get; set; }
 
         public virtual Household Household { get; set; }
         public virtual Category Category { get; set; }

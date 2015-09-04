@@ -61,3 +61,5 @@ C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\bin\S
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.csprojResolveAssemblyReference.cache
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.dll
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.pdb
+C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\bin\SendGrid.SmtpApi.dll
+C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\bin\SendGridMail.dll

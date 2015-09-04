@@ -47,6 +47,8 @@ namespace HouseholdBudgeter.Models
 
         public System.Data.Entity.DbSet<HouseholdBudgeter.Models.Account> Accounts { get; set; }
 
+        public System.Data.Entity.DbSet<HouseholdBudgeter.Models.Invitaton> Invitation { get; set; }
+
 
         
     }

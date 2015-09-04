@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace HouseholdBudgeter.Models
 {
@@ -16,7 +17,9 @@ namespace HouseholdBudgeter.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<BudgetItem> BudgetItems { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

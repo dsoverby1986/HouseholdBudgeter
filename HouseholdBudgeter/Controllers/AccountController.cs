@@ -230,7 +230,6 @@ namespace HouseholdBudgeter.Controllers
         // GET api/Account/ExternalLogin
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        [AllowAnonymous]
         [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
@@ -285,7 +284,6 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
-        [AllowAnonymous]
         [Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
         {
@@ -344,7 +342,12 @@ namespace HouseholdBudgeter.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            if (model.InvitedEmail != null && model.Code != null)
+            {
+                return await JoinHousehold(model.InvitedEmail, model.Code);
+            }
+
+            return Ok(user.Email + " is now a registered user.");
         }
 
         // POST api/Account/RegisterExternal
@@ -382,7 +385,6 @@ namespace HouseholdBudgeter.Controllers
 
         // GET: api/Households
         [Route("HouseHolds")]
-        [AllowAnonymous]
         public IQueryable<Household> GetHouseholds()
         {
             return db.Households;
@@ -438,11 +440,13 @@ namespace HouseholdBudgeter.Controllers
         }*/
 
         // POST: api/Households
+        [Authorize]
         [Route("CreateHousehold")]
-        [AllowAnonymous]
         [ResponseType(typeof(Household))]
         public async Task<IHttpActionResult> PostHousehold(string name)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
             Household household = new Household()
             {
                 Name = name
@@ -453,14 +457,22 @@ namespace HouseholdBudgeter.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(user.HouseholdId != null)
+            {
+                return Ok("You will have to leave your current household in order to create another.");
+            }
+
             db.Households.Add(household);
+
+            user.HouseholdId = household.Id;
+
             await db.SaveChangesAsync();
 
             return Ok(household);
         }
 
         // DELETE: api/Households/5
-        [ResponseType(typeof(Household))]
+        /*[ResponseType(typeof(Household))]
         public async Task<IHttpActionResult> DeleteHousehold(int id)
         {
             Household household = await db.Households.FindAsync(id);
@@ -473,6 +485,131 @@ namespace HouseholdBudgeter.Controllers
             await db.SaveChangesAsync();
 
             return Ok(household);
+        }*/
+
+        [Route("JoinHousehold")]
+        [ResponseType(typeof(Household))]
+        public async Task<IHttpActionResult> JoinHousehold(string inviteEmail, string inviteCode)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var outuser = db.Users.Where(u => u.Email == inviteEmail).FirstOrDefault();
+
+            var invite = db.Invitation.Where(i => i.Code == inviteCode && i.InvitedEmail == inviteEmail).FirstOrDefault();
+
+            if(invite != null){
+                if(user != null)
+                {
+                    user.HouseholdId = invite.HouseholdId;
+                }
+                else
+                {
+                    outuser.HouseholdId = invite.HouseholdId;
+                }
+                
+                db.Invitation.Remove(invite);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            await db.SaveChangesAsync();
+            if (user != null)
+            {
+                return Ok(user.Email + " has joined the " + user.Household.Name + " household.");
+            }
+
+            return Ok(outuser.Email + " is now registered and a member of the " + outuser.Household.Name + " household.");
+        }
+
+        [Authorize]
+        [Route("LeaveHousehold")]
+        public async Task<IHttpActionResult> LeaveHousehold()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var household = user.Household.Name;
+
+            user.HouseholdId = null;
+
+            await db.SaveChangesAsync();
+
+            return Ok(user.Email + " is no longer a member of the " + household + ".");
+        }
+
+        [Authorize]
+        [Route("HouseholdUsers")]
+        [ResponseType(typeof(ApplicationUser))]
+        public IHttpActionResult GetHouseholdUsers()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var list = user.Household.Users.ToList();
+            var userList = db.Users.Where(u => u.HouseholdId == user.HouseholdId).ToArray();
+            var response = "Member(s) of this household: ";
+
+            foreach(var member in userList)
+            {
+                if(member != userList[userList.Length-1])
+                {
+                    response += (member.Email + ", ");
+                }
+                else
+                {
+                    response += member.Email;
+                }
+            }
+            return Ok(response);
+        }
+         
+        [Authorize]
+        [Route("SendInvite")]
+        [ResponseType(typeof(Invitaton))]
+        public async Task<IHttpActionResult> PostInvite(string inviteEmail)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            InviteCode code = new InviteCode();
+
+            var inviteExists = db.Invitation.Any(i => i.InvitedEmail == inviteEmail);
+
+            var invite = new Invitaton();
+
+            if (inviteExists)
+            {
+                invite = db.Invitation.Where(i => i.InvitedEmail == inviteEmail).FirstOrDefault();
+            }
+            else
+            {
+                invite = new Invitaton()
+                {
+                    Code = code.CreateCode(),
+                    HouseholdId = user.HouseholdId,
+                    InvitedEmail = inviteEmail
+                };
+
+                db.Invitation.Add(invite);
+            }
+
+            var invitedUserExists = db.Users.Any(u => u.Email == inviteEmail);
+
+            //var url = invitedUserExists ? Url.Route("Go to join view", "") : Url.Route("Go to register and join view", "");
+
+            var mailer = new EmailService();
+
+            var message = new IdentityMessage()
+            {
+                Subject = "You've been invited",
+                Destination = inviteEmail,
+                Body = "You've been invited to join " + user.DisplayName + "'s household. This is your join code: " +  invite.Code
+            };
+
+            await db.SaveChangesAsync();
+
+            await mailer.SendAsync(message);
+
+            return Ok(invite);
+
         }
 
         private bool HouseholdExists(int id)
@@ -593,6 +730,17 @@ namespace HouseholdBudgeter.Controllers
                 byte[] data = new byte[strengthInBytes];
                 _random.GetBytes(data);
                 return HttpServerUtility.UrlTokenEncode(data);
+            }
+        }
+
+
+        public class InviteCode
+        {
+            public string CreateCode()
+            {
+                var chars = "01234abcde";
+                var random = new Random();
+                return new string(Enumerable.Range(0, 8).Select(c => chars[random.Next(chars.Length)]).ToArray());
             }
         }
 

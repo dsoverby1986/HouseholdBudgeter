@@ -219,6 +219,7 @@
     <Compile Include="Models\BudgetItem.cs" />
     <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\dbExtensions.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitaton.cs" />

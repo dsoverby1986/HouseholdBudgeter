@@ -21,11 +21,12 @@ namespace HouseholdBudgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Accounts
+        [Route("GetAccounts")]
         public IHttpActionResult GetAccounts()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var accountList = user.Household.Accounts.ToList();
+            var accountList = user.Household.Accounts.Where(a => a.Archived == false).Select(a => a).ToList();
 
             return Ok(accountList);
         }
@@ -99,23 +100,43 @@ namespace HouseholdBudgeter.Controllers
 
         // PUT: api/Accounts/5
         [Route("EditAccount")]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutAccount(int accountId, string name)
+        [ResponseType(typeof(Account))]
+        public async Task<IHttpActionResult> PutAccount(Account account)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var accountIsHad = user.Household.Accounts.Any(a => a.Id == accountId);
+            var accountIsHad = user.Household.Accounts.Any(a => a.Id == account.Id);
 
-            var existingAccount = user.Household.Accounts.FirstOrDefault(a => a.Id == accountId);
+            var existingAccount = user.Household.Accounts.FirstOrDefault(a => a.Id == account.Id);
 
             if(!accountIsHad)
             {
                 return Ok("You do not have permission to edit this account");
             }
 
-            if(name != existingAccount.Name)
+            if(account.Name != existingAccount.Name)
             {
-                existingAccount.Name = name;
+                existingAccount.Name = account.Name;
+            }
+
+            if(account.Balance != existingAccount.Balance)
+            {
+                decimal adjustmentAmount = account.Balance - existingAccount.Balance;
+
+                Transaction trans = new Transaction()
+                {
+                    Description = "Manual Account Balance Adjustment.",
+                    AccountId = existingAccount.Id,
+                    Account = existingAccount,
+                    Amount = adjustmentAmount,
+                    Category = db.Categories.Find(1),
+                    Created = DateTimeOffset.Now,
+                    CategoryId = 1
+                };
+
+                existingAccount.Balance = account.Balance;
+
+                db.Transactions.Add(trans);
             }
 
             await db.SaveChangesAsync();
@@ -156,7 +177,7 @@ namespace HouseholdBudgeter.Controllers
         // POST: api/Accounts
         [Route("CreateAccount")]
         [ResponseType(typeof(Account))]
-        public async Task<IHttpActionResult> PostAccount(string name)
+        public async Task<IHttpActionResult> PostAccount(Account account)
         {
             if (!ModelState.IsValid)
             {
@@ -165,17 +186,30 @@ namespace HouseholdBudgeter.Controllers
 
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var account = new Account()
+            if (user.HouseholdId == null)
             {
-                Name = name,
-                Balance = 0,
-                HouseholdId = (int)user.HouseholdId
-            };
-
+                return Ok("To create accounts you must first create or join a household.");
+            }
+            account.HouseholdId = (int)user.HouseholdId;
+            account.Household = db.Households.Find(user.HouseholdId);
+            
             db.Accounts.Add(account);
             await db.SaveChangesAsync();
 
+            Transaction trans = new Transaction()
+            {
+                Description = "Account Initialization",
+                Amount = account.Balance,
+                CategoryId = 1,
+                Created = DateTimeOffset.Now,
+                AccountId = account.Id,
+            };
+
+            db.Transactions.Add(trans);
+            await db.SaveChangesAsync();
+            
             return Ok(account);
+            //"The " + account.Name + " account has been created for the " + account.Household.Name + " household. A transaction showing the initialization of this account has also been created." + 
         }
 
         [Route("ArchiveAccount")]

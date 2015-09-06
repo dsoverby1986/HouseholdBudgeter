@@ -67,48 +67,45 @@ namespace HouseholdBudgeter.Controllers
         // PUT: api/Transactions/5
         [Route("EditTransaction")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutTransaction(int id, string description/*, string status*/, decimal? amount, int? catId, bool? rec)
+        public async Task<IHttpActionResult> PutTransaction(Transaction alteredTrans)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var trans = db.Transactions.Find(id);
+            var trans = db.Transactions.Find(alteredTrans.AccountId);
 
-            if (id != trans.Id)
-            { 
+            if (alteredTrans.AccountId != trans.Id)
+            {
                 return BadRequest();
             }
 
-            if (!string.IsNullOrWhiteSpace(description))
+            if(alteredTrans.Description != trans.Description)
             {
-                trans.Description = description;
+                trans.Description = alteredTrans.Description;
             }
 
-            /*if(!string.IsNullOrWhiteSpace(status))
-            {
-                trans.Status = status;
-            }*/
-
-            if (amount != null)
+            if (alteredTrans.Amount != null)
             {
                 trans.Account.Balance -= trans.Amount;
-                trans.Amount = (decimal)amount;
-                trans.Account.Balance += (decimal)amount;
+                trans.Amount = alteredTrans.Amount;
+                trans.Account.Balance += alteredTrans.Amount;
             }
 
-            if(catId != null)
+            if (alteredTrans.CategoryId != null)
             {
-                trans.CategoryId = (int)catId;
+                trans.CategoryId = alteredTrans.CategoryId;
             }
 
-            if(trans.Reconciled != rec)
+            if (trans.Reconciled != alteredTrans.Reconciled)
             {
-                trans.Reconciled = (bool)rec;
+                trans.Reconciled = alteredTrans.Reconciled;
             }
 
             trans.Updated = DateTimeOffset.Now;
+
+            //db.Update(trans, ["Description", "Amount", "Reconciled", "CategoryId", "Archived"]);
 
             await db.SaveChangesAsync();
 
@@ -136,12 +133,13 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // DELETE: api/Transactions/5
+        [Route("DeleteTransaction")]
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> DeleteTransaction(int id)
         {
             Transaction transaction = await db.Transactions.FindAsync(id);
             var user = db.Users.Find(User.Identity.GetUserId());
-            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == id);
+            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == transaction.AccountId);
 
             if (transaction == null)
             {
@@ -153,7 +151,9 @@ namespace HouseholdBudgeter.Controllers
             db.Transactions.Remove(transaction);
             await db.SaveChangesAsync();
 
-            return Ok(transaction);
+            return Ok("The transaction with id: " + transaction.Id + " has been deleted. The updated balance for the " + account.Name + " account is " + account.Balance + ".");
+
+            //return Ok(transaction);
         }
 
         protected override void Dispose(bool disposing)

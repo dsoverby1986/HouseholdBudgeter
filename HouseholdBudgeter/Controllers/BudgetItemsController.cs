@@ -13,6 +13,8 @@ using Microsoft.AspNet.Identity;
 
 namespace HouseholdBudgeter.Models
 {
+    [RoutePrefix("api/BudgetItems")]
+    [Authorize]
     public class BudgetItemsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -37,20 +39,41 @@ namespace HouseholdBudgeter.Models
         }
 
         // PUT: api/BudgetItems/5
+        [Route("EditBudgetItem")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutBudgetItem(int id, BudgetItem budgetItem)
+        public async Task<IHttpActionResult> PutBudgetItem(BudgetItem budgetItem)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != budgetItem.Id)
+            if (budgetItem.Id == null)
             {
                 return BadRequest();
             }
 
-            db.Entry(budgetItem).State = EntityState.Modified;
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var item = db.BudgetItems.Find(budgetItem.Id);
+            var itemIshad = user.Household.BudgetItems.Any(i => i.Id == budgetItem.Id);
+
+            if (!itemIshad)
+                return Ok("You do not have permission to alter this budget item.");
+
+            if (budgetItem.Amount != item.Amount)
+                item.Amount = budgetItem.Amount;
+
+            if (budgetItem.CategoryId != 0 && budgetItem.CategoryId != item.CategoryId)
+            {
+                item.CategoryId = budgetItem.CategoryId;
+                item.Category = db.Categories.Find(budgetItem.CategoryId);
+            }
+
+            if (budgetItem.Frequency != item.Frequency)
+                item.Frequency = budgetItem.Frequency;
+
+            if (budgetItem.Name != null && budgetItem.Name != item.Name)
+                item.Name = budgetItem.Name;
 
             try
             {
@@ -58,7 +81,7 @@ namespace HouseholdBudgeter.Models
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BudgetItemExists(id))
+                if (!BudgetItemExists(budgetItem.Id))
                 {
                     return NotFound();
                 }
@@ -68,10 +91,11 @@ namespace HouseholdBudgeter.Models
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(item);
         }
 
         // POST: api/BudgetItems
+        [Route("CreateBudgetItem")]
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> PostBudgetItem(BudgetItem budgetItem)
         {
@@ -82,13 +106,18 @@ namespace HouseholdBudgeter.Models
 
             var user = db.Users.Find(User.Identity.GetUserId());
 
+            budgetItem.HouseHoldId = (int)user.HouseholdId;
+            budgetItem.Household = user.Household;
+            budgetItem.Category = db.Categories.Find(budgetItem.CategoryId);
+
             db.BudgetItems.Add(budgetItem);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = budgetItem.Id }, budgetItem);
+            return Ok(budgetItem);
         }
 
         // DELETE: api/BudgetItems/5
+        [Route("DeleteBudgetItem")]
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> DeleteBudgetItem(int id)
         {
@@ -101,7 +130,7 @@ namespace HouseholdBudgeter.Models
             db.BudgetItems.Remove(budgetItem);
             await db.SaveChangesAsync();
 
-            return Ok(budgetItem);
+            return Ok("The " + budgetItem.Name + " budget item has been deleted.");
         }
 
         protected override void Dispose(bool disposing)

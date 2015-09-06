@@ -20,6 +20,7 @@ namespace HouseholdBudgeter.Models
         public bool Archived { get; set; }
         
         public virtual Category Category { get; set; }
+        [JsonIgnore]
         public virtual Account Account { get; set; }
 
     }

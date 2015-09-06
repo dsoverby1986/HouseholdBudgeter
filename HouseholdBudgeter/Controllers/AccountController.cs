@@ -535,7 +535,7 @@ namespace HouseholdBudgeter.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok(user.Email + " is no longer a member of the " + household + ".");
+            return Ok(user.Email + " is no longer a member of the " + household + " household.");
         }
 
         [Authorize]

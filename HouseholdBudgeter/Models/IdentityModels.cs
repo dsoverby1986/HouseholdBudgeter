@@ -1,8 +1,12 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace HouseholdBudgeter.Models
 {
@@ -49,7 +53,54 @@ namespace HouseholdBudgeter.Models
 
         public System.Data.Entity.DbSet<HouseholdBudgeter.Models.Invitaton> Invitation { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+
+        public async Task<bool> AddRefreshToken(RefreshToken token)
+        {
+
+            var existingToken = RefreshTokens.SingleOrDefault(r => r.Subject == token.Subject);
+
+            if (existingToken != null)
+            {
+                var result = await RemoveRefreshToken(existingToken);
+            }
+
+            RefreshTokens.Add(token);
+
+            return await SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> RemoveRefreshToken(string refreshTokenId)
+        {
+            var refreshToken = await RefreshTokens.FindAsync(refreshTokenId);
+
+            if (refreshToken != null)
+            {
+                RefreshTokens.Remove(refreshToken);
+                return await SaveChangesAsync() > 0;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
+        {
+            RefreshTokens.Remove(refreshToken);
+            return await SaveChangesAsync() > 0;
+        }
+
+        public async Task<RefreshToken> FindRefreshToken(string refreshTokenId)
+        {
+            var refreshToken = await RefreshTokens.FindAsync(refreshTokenId);
+
+            return refreshToken;
+        }
+
+        public List<RefreshToken> GetAllRefreshTokens()
+        {
+            return RefreshTokens.ToList();
+        }
         
     }
 }

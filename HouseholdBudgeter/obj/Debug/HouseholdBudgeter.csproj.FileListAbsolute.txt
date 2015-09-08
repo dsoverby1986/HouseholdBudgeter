@@ -63,3 +63,6 @@ C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\D
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.pdb
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\bin\SendGrid.SmtpApi.dll
 C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\bin\SendGridMail.dll
+C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.Migrations.automaticmigrationsenabled.resources
+C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.csproj.GenerateResource.Cache
+C:\Users\dsoverby1986\Documents\GitHub\HouseholdBudgeter\HouseholdBudgeter\obj\Debug\HouseholdBudgeter.Migrations.updatedatabase.resources

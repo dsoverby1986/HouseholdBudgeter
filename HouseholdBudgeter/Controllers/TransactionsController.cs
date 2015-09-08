@@ -21,6 +21,7 @@ namespace HouseholdBudgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Transactions
+        [Route("GetTransactions")]
         public IHttpActionResult GetTransactions(int id)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -40,7 +41,7 @@ namespace HouseholdBudgeter.Controllers
         }
 
         [Route("TransByCategory")]
-        public IHttpActionResult TransByCategory(int accountId, int catId)
+        public IHttpActionResult GetTransByCategory(int accountId, int catId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
@@ -63,7 +64,7 @@ namespace HouseholdBudgeter.Controllers
 
             return Ok(transaction);
         }
-         
+        
         // PUT: api/Transactions/5
         [Route("EditTransaction")]
         [ResponseType(typeof(void))]
@@ -74,17 +75,21 @@ namespace HouseholdBudgeter.Controllers
                 return BadRequest(ModelState);
             }
 
-            var trans = db.Transactions.Find(alteredTrans.AccountId);
+            var trans = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == alteredTrans.Id);
 
-            if (alteredTrans.AccountId != trans.Id)
+            if (trans == null)
             {
                 return BadRequest();
             }
 
-            if(alteredTrans.Description != trans.Description)
+            if (!alteredTrans.IsIncome)
             {
-                trans.Description = alteredTrans.Description;
+                if (alteredTrans.Amount > 0)
+                    alteredTrans.Amount *= -1;
             }
+            else
+                if (alteredTrans.Amount < 0)
+                    alteredTrans.Amount *= -1;
 
             if (alteredTrans.Amount != null)
             {
@@ -93,19 +98,9 @@ namespace HouseholdBudgeter.Controllers
                 trans.Account.Balance += alteredTrans.Amount;
             }
 
-            if (alteredTrans.CategoryId != null)
-            {
-                trans.CategoryId = alteredTrans.CategoryId;
-            }
-
-            if (trans.Reconciled != alteredTrans.Reconciled)
-            {
-                trans.Reconciled = alteredTrans.Reconciled;
-            }
-
             trans.Updated = DateTimeOffset.Now;
 
-            //db.Update(trans, ["Description", "Amount", "Reconciled", "CategoryId", "Archived"]);
+            db.Update(trans, "Description", "Amount", "Reconciled", "CategoryId", "Archived");
 
             await db.SaveChangesAsync();
 
@@ -116,14 +111,24 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> PostTransaction(Transaction trans)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            if (!trans.IsIncome)
+            {
+                if (trans.Amount > 0)
+                    trans.Amount *= -1;
+            }
+            else
+                if (trans.Amount < 0)
+                    trans.Amount *= -1;
+
             trans.Created = DateTimeOffset.Now;
-            db.Transactions.Add(trans);
-            var account = db.Accounts.Find(trans.AccountId);
+            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
             account.Balance = account.Balance + trans.Amount;
 
             db.Transactions.Add(trans);

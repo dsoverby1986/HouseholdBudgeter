@@ -21,7 +21,8 @@ namespace HouseholdBudgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Accounts
-        [Route("GetAccounts")]
+        [Authorize]
+        [HttpPost, Route("GetAccounts")]
         public IHttpActionResult GetAccounts()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -32,7 +33,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // GET: api/Accounts/5
-        [Route("GetAccount")]
+        [Authorize]
+        [HttpPost, Route("GetAccount")]
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> GetAccount(int id)
         {
@@ -99,7 +101,8 @@ namespace HouseholdBudgeter.Controllers
         }*/
 
         // PUT: api/Accounts/5
-        [Route("EditAccount")]
+        [Authorize]
+        [HttpPost, Route("EditAccount")]
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PutAccount(Account account)
         {
@@ -144,7 +147,8 @@ namespace HouseholdBudgeter.Controllers
             return Ok(existingAccount);
         }
 
-        [Route("AdjustBalance")]
+        [Authorize]
+        [HttpPost, Route("AdjustBalance")]
         public async Task<IHttpActionResult> AdjustBalance(int id, decimal newBalance)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -175,7 +179,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // POST: api/Accounts
-        [Route("CreateAccount")]
+        [Authorize]
+        [HttpPost, Route("CreateAccount")]
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PostAccount(Account account)
         {
@@ -212,7 +217,8 @@ namespace HouseholdBudgeter.Controllers
             //"The " + account.Name + " account has been created for the " + account.Household.Name + " household. A transaction showing the initialization of this account has also been created." + 
         }
 
-        [Route("ArchiveAccount")]
+        [Authorize]
+        [HttpPost, Route("ArchiveAccount")]
         public async Task<IHttpActionResult> PutArchiveAccount(int id)
         {
             var user = db.Users.Find(User.Identity.GetUserId());

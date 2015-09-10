@@ -1,0 +1,34 @@
+﻿<br />
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-1">
+                <h3>Create Household</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-1">
+                <form>
+                    <input ng-model="houseJoin.name" type="text" placeholder="Household Name">
+                    <button type="submit" ng-click="houseJoin.createHousehold(houseJoin.name)">Create</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-1">
+                <h3>Join Household</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-1">
+                <form>
+                    <input ng-model="houseJoin.email" type="email" placeholder="Invited Email" />
+                    <input ng-model="houseJoin.code" type="text" placeholder="Invite Code" />
+                    <button type="submit" ng-click="houseJoin.joinHousehold(houseJoin.email, houseJoin.code)">Join</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

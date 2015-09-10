@@ -391,17 +391,28 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // GET: api/Households/5
-        [Route("Household")]
+        [Authorize]
+        [HttpPost, Route("Household")]
         [ResponseType(typeof(Household))]
-        public async Task<IHttpActionResult> GetHousehold(int id)
+        public IHttpActionResult GetHousehold()
         {
-            Household household = await db.Households.FindAsync(id);
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            Household household = db.Households.FirstOrDefault(h => h.Id == user.HouseholdId);
             if (household == null)
             {
                 return NotFound();
             }
 
-            return Ok(household);
+            HouseholdVM householdVM = new HouseholdVM()
+            {
+                Name = household.Name,
+                Accounts = household.Accounts.ToList(),
+                BudgetItems = household.BudgetItems.ToList(),
+                Users = household.Users.ToList()
+            };
+
+            return Ok(householdVM);
         }
 
         // PUT: api/Households/5
@@ -441,7 +452,7 @@ namespace HouseholdBudgeter.Controllers
 
         // POST: api/Households
         [Authorize]
-        [Route("CreateHousehold")]
+        [HttpPost, Route("CreateHousehold")]
         [ResponseType(typeof(Household))]
         public async Task<IHttpActionResult> PostHousehold(string name)
         {
@@ -486,8 +497,8 @@ namespace HouseholdBudgeter.Controllers
 
             return Ok(household);
         }*/
-
-        [Route("JoinHousehold")]
+        [Authorize]
+        [HttpPost, Route("JoinHousehold")]
         [ResponseType(typeof(Household))]
         public async Task<IHttpActionResult> JoinHousehold(string inviteEmail, string inviteCode)
         {
@@ -524,7 +535,7 @@ namespace HouseholdBudgeter.Controllers
         }
 
         [Authorize]
-        [Route("LeaveHousehold")]
+        [HttpPost, Route("LeaveHousehold")]
         public async Task<IHttpActionResult> LeaveHousehold()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -539,7 +550,7 @@ namespace HouseholdBudgeter.Controllers
         }
 
         [Authorize]
-        [Route("HouseholdUsers")]
+        [HttpPost, Route("HouseholdUsers")]
         [ResponseType(typeof(ApplicationUser))]
         public IHttpActionResult GetHouseholdUsers()
         {
@@ -562,36 +573,35 @@ namespace HouseholdBudgeter.Controllers
             return Ok(response);
         }
          
+        public class WebApiSucksSoMuch
+        {
+            public string Email { get; set; }
+        }
+
         [Authorize]
-        [Route("SendInvite")]
+        [HttpPost, Route("SendInvite")]
         [ResponseType(typeof(Invitaton))]
-        public async Task<IHttpActionResult> PostInvite(string inviteEmail)
+        public async Task<IHttpActionResult> PostInvite(WebApiSucksSoMuch inviteEmail)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
             InviteCode code = new InviteCode();
 
-            var inviteExists = db.Invitation.Any(i => i.InvitedEmail == inviteEmail);
+            var invite = db.Invitation.FirstOrDefault(i => i.InvitedEmail == inviteEmail.Email && i.HouseholdId == user.HouseholdId);
 
-            var invite = new Invitaton();
-
-            if (inviteExists)
-            {
-                invite = db.Invitation.Where(i => i.InvitedEmail == inviteEmail).FirstOrDefault();
-            }
-            else
+            if(invite == null)
             {
                 invite = new Invitaton()
                 {
                     Code = code.CreateCode(),
                     HouseholdId = user.HouseholdId,
-                    InvitedEmail = inviteEmail
+                    InvitedEmail = inviteEmail.Email
                 };
 
                 db.Invitation.Add(invite);
             }
 
-            var invitedUserExists = db.Users.Any(u => u.Email == inviteEmail);
+            var invitedUserExists = db.Users.Any(u => u.Email == inviteEmail.Email);
 
             //var url = invitedUserExists ? Url.Route("Go to join view", "") : Url.Route("Go to register and join view", "");
 
@@ -600,7 +610,7 @@ namespace HouseholdBudgeter.Controllers
             var message = new IdentityMessage()
             {
                 Subject = "You've been invited",
-                Destination = inviteEmail,
+                Destination = inviteEmail.Email,
                 Body = "You've been invited to join " + user.DisplayName + "'s household. This is your join code: " +  invite.Code
             };
 

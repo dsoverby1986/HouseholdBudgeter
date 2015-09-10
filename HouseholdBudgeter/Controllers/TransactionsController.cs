@@ -21,7 +21,8 @@ namespace HouseholdBudgeter.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Transactions
-        [Route("GetTransactions")]
+        [Authorize]
+        [HttpPost, Route("GetTransactions")]
         public IHttpActionResult GetTransactions(int id)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -40,7 +41,8 @@ namespace HouseholdBudgeter.Controllers
             
         }
 
-        [Route("TransByCategory")]
+        [Authorize]
+        [HttpPost, Route("TransByCategory")]
         public IHttpActionResult GetTransByCategory(int accountId, int catId)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -53,6 +55,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // GET: api/Transactions/5
+        [Authorize]
+        [HttpPost, Route("Transaction")]
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> GetTransaction(int id)
         {
@@ -66,7 +70,8 @@ namespace HouseholdBudgeter.Controllers
         }
         
         // PUT: api/Transactions/5
-        [Route("EditTransaction")]
+        [Authorize]
+        [HttpPost, Route("EditTransaction")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutTransaction(Transaction alteredTrans)
         {
@@ -108,6 +113,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // POST: api/Transactions
+        [Authorize]
+        [HttpPost, Route("CreateTransaction")]
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> PostTransaction(Transaction trans)
         {
@@ -138,7 +145,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // DELETE: api/Transactions/5
-        [Route("DeleteTransaction")]
+        [Authorize]
+        [HttpPost, Route("DeleteTransaction")]
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> DeleteTransaction(int id)
         {

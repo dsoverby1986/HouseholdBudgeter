@@ -20,12 +20,19 @@ namespace HouseholdBudgeter.Models
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/BudgetItems
-        public IQueryable<BudgetItem> GetBudgetItems()
+        [HttpPost, Route("BudgetItems")]
+        [ResponseType(typeof(BudgetItem))]
+        public IHttpActionResult GetBudgetItems()
         {
-            return db.BudgetItems;
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var budgetItems = user.Household.BudgetItems;
+
+            return Ok(budgetItems);
         }
 
         // GET: api/BudgetItems/5
+        [HttpPost, Route("BudgetItem")]
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> GetBudgetItem(int id)
         {
@@ -46,11 +53,6 @@ namespace HouseholdBudgeter.Models
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-
-            if (budgetItem.Id == null)
-            {
-                return BadRequest();
             }
 
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -95,7 +97,8 @@ namespace HouseholdBudgeter.Models
         }
 
         // POST: api/BudgetItems
-        [Route("CreateBudgetItem")]
+        [Authorize]
+        [HttpPost, Route("CreateBudgetItem")]
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> PostBudgetItem(BudgetItem budgetItem)
         {
@@ -117,7 +120,8 @@ namespace HouseholdBudgeter.Models
         }
 
         // DELETE: api/BudgetItems/5
-        [Route("DeleteBudgetItem")]
+        [Authorize]
+        [HttpPost, Route("DeleteBudgetItem")]
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> DeleteBudgetItem(int id)
         {

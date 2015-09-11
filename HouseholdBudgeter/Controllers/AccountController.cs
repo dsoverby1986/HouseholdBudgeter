@@ -393,7 +393,7 @@ namespace HouseholdBudgeter.Controllers
         // GET: api/Households/5
         [Authorize]
         [HttpPost, Route("Household")]
-        [ResponseType(typeof(Household))]
+        [ResponseType(typeof(HouseholdVM))]
         public IHttpActionResult GetHousehold()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -409,7 +409,14 @@ namespace HouseholdBudgeter.Controllers
                 Name = household.Name,
                 Accounts = household.Accounts.ToList(),
                 BudgetItems = household.BudgetItems.ToList(),
-                Users = household.Users.ToList()
+                Users = household.Users.Select(u => new HouseholdVM.User
+                {
+                     DisplayName=u.DisplayName,
+                     FirstName=u.FirstName,
+                     LastName=u.LastName,
+                     Email=u.Email
+
+                }).ToList()
             };
 
             return Ok(householdVM);

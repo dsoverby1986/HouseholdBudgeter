@@ -57,7 +57,7 @@
           .state('accounts.list', {
               url: "",
               templateUrl: "/app/templates/accountsList.html",
-              controlller: "accountsListCtrl as accountsList",
+              controller: "accountsListCtrl as accountsList",
               resolve: {
                   accounts: ['accountSvc', function (accountSvc) {
                       return accountSvc.getAccounts();

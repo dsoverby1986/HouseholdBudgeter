@@ -1,4 +1,4 @@
-﻿/*(function () {
+﻿(function () {
     angular.module('HouseholdBudgeter')
         .controller('accountCtrl', ['accountSvc', '$state', function (accountSvc, $state) {
 
@@ -36,6 +36,5 @@
                 });
             }
 
-            this.getAccount();
     }])
-})();*/
+})();

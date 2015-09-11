@@ -1,9 +1,9 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-    .factory('AccountSvc', ['$http', function ($http) {
-        var f = {};
+        .factory('accountSvc', ['$http', function ($http) {
+            var f = {};
 
-        f.getAccconts = function () {
+        f.getAccounts = function () {
             return $http.post('/api/accounts/getaccounts').then(function (response) {
                 return response.data;
             });

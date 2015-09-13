@@ -20,12 +20,22 @@
                 </ul>
                 <ul class="nav navbar-nav text-center">
                     <li>
+                        <a ui-sref="dashboard.details">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav text-center">
+                    <li>
                         <a ui-sref="household.details">Household</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav text-center">
                     <li>
                         <a ui-sref="accounts.list">Accounts</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav text-center">
+                    <li>
+                        <a ui-sref="budget.list">Budget</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -51,7 +61,6 @@
 
     </div>
 
-
     <script src="~/Scripts/angular.min.js"></script>
     <script src="~/Scripts/angular-ui-router.min.js"></script>
     <script src="~/Scripts/angular-local-storage.min.js"></script>
@@ -66,6 +75,13 @@
     <script src="~/app/services/accountSvc.js"></script>
     <script src="~/app/controllers/accountCtrl.js"></script>
     <script src="~/app/controllers/accountsListCtrl.js"></script>
+    <script src="~/app/controllers/createAccountCtrl.js"></script>
+    <script src="~/app/controllers/accountEditCtrl.js"></script>
+    <script src="~/app/controllers/budgetListCtrl.js"></script>
+    <script src="~/app/controllers/budgetCtrl.js"></script>
+    <script src="~/app/services/budgetItemSvc.js"></script>
+    <script src="~/app/controllers/dashboardCtrl.js"></script>
+    <script src="~/app/controllers/dashboardDetailsCtrl.js"></script>
 
     <script src="~/app/controllers/confirmModalCtrl.js"></script>
     <script src="~/app/services/confirmModalSvc.js"></script>
@@ -75,5 +91,6 @@
     <script src="~/app/controllers/householdCtrl.js"></script>
     <script src="~/app/controllers/householdDetailsCtrl.js"></script>
     <script src="~/app/controllers/householdJoinCtrl.js"></script>
+
 </body>
 </html>

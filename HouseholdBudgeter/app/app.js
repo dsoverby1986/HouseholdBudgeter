@@ -45,8 +45,14 @@
           })
           .state('dashboard', {
               url: "/dashboard",
+              abstract: true,
               templateUrl: "/app/templates/dashboard.html",
               controller: "dashboardCtrl as dashboard"
+          })
+          .state('dashboard.details', {
+              url: "",
+              tempalteUrl: "/app/templates/dashboardDetails.html",
+              controller: "dashboardDetailsCtrl as dashboardDetails"
           })
           .state('accounts', {
               url: "/accounts",
@@ -64,11 +70,42 @@
                   }]
               }
           })
+          .state('accounts.list.create', {
+              url: "",
+              templateUrl: "/app/templates/createAccount.html",
+              controller: "createAccountCtrl as createAccount"
+          })
+          .state('accounts.list.details', {
+              url: "",
+              templateUrl: "/app/templates/accountDetails.html",
+              controller: "accountDetailsCtrl as accountDetails",
+              /*resolve: {
+                  transactions: ['transactionSvc', function (transactionSvc) {
+                      return transactionSvc.getTransactions(id);
+                  }]
+              }*/
+          })
+            .state('accounts.list.edit', {
+                url: "",
+                templateUrl: "/app/templates/editACcount.html",
+                controller: "accountEditCtrl as accountEdit"
+            })
           .state('budget', {
               url: "/budget",
-              templateUrl: "/app/template/budget.html",
+              abstract: true,
+              templateUrl: "/app/templates/budget.html",
               controller: "budgetCtrl as budget"
-          });
+          })
+          .state('budget.list', {
+              url: "",
+              templateUrl: "/app/templates/budgetList.html",
+              controller: "budgetListCtrl as budgetList",
+              resolve: {
+                  budgetItems: ['budgetItemSvc', function (budgetItemSvc) {
+                      return budgetItemSvc.getBudgetItems();
+                  }]
+              }
+        });
     });
 
     var serviceBase = 'http://localhost:58596/';

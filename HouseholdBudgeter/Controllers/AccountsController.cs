@@ -205,6 +205,7 @@ namespace HouseholdBudgeter.Controllers
                 CategoryId = 1,
                 Created = DateTimeOffset.Now,
                 AccountId = account.Id,
+                IsIncome = true
             };
 
             db.Transactions.Add(trans);

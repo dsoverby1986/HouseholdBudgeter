@@ -7,6 +7,17 @@
                         Accounts List
                     </h3>
                 </div>
+                <div>
+                    <div>
+                        <a ui-sref="accounts.list.create">Create Account</a>
+                    </div>
+                    <div>
+                        <a ui-sref="accounts.list.details">Account Details</a>
+                    </div>
+                    <div>
+                        <a ui-sref="accounts.list.edit">Edit Account</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -27,12 +38,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                
+                            <tr ng-repeat="account in accountsList.accounts">
+                                <td>{{account.Name}}</td>
+                                <td>{{account.Balance}}</td>
+                                <!--<td><a ui-sref="account.details({ id: {{account.Id}} })">Details</a> | <a ng-click="">Edit</a> | <a ng-click="">Archive</a></td>-->
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <br />
+                <br />
+                <a ng-click="">Create Account</a>
+            </div>
+            <div class="col-lg-5" ui-view>
             </div>
         </div>
     </div>

@@ -247,8 +247,15 @@
   <ItemGroup>
     <Content Include="app\app.js" />
     <Content Include="app\controllers\accountCtrl.js" />
+    <Content Include="app\controllers\accountDetailsCtrl.js" />
+    <Content Include="app\controllers\accountEditCtrl.js" />
     <Content Include="app\controllers\accountsListCtrl.js" />
+    <Content Include="app\controllers\budgetCtrl.js" />
+    <Content Include="app\controllers\budgetListCtrl.js" />
     <Content Include="app\controllers\confirmModalCtrl.js" />
+    <Content Include="app\controllers\createAccountCtrl.js" />
+    <Content Include="app\controllers\dashboardCtrl.js" />
+    <Content Include="app\controllers\dashboardDetailsCtrl.js" />
     <Content Include="app\controllers\homeCtrl.js" />
     <Content Include="app\controllers\householdJoinCtrl.js" />
     <Content Include="app\controllers\householdDetailsCtrl.js" />
@@ -261,8 +268,15 @@
     <Content Include="app\services\confirmModalSvc.js" />
     <Content Include="app\services\householdSvc.js" />
     <Content Include="app\services\transactionSvc.js" />
+    <Content Include="app\templates\accountDetails.html" />
+    <Content Include="app\templates\accountEdit.html" />
     <Content Include="app\templates\accounts.html" />
     <Content Include="app\templates\accountsList.html" />
+    <Content Include="app\templates\budget.html" />
+    <Content Include="app\templates\budgetList.html" />
+    <Content Include="app\templates\dashboardDetails.html" />
+    <Content Include="app\templates\editAccount.html" />
+    <Content Include="app\templates\createAccount.html" />
     <Content Include="app\templates\joinHousehold.html" />
     <Content Include="app\templates\dashboard.html" />
     <Content Include="app\templates\home.html" />

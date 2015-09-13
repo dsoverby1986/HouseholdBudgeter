@@ -6,6 +6,10 @@
 
             self.display = {};
 
+            self.name = "";
+
+            self.balance = "";
+
             this.getAccounts = function () {
                 accountSvc.getAccounts().then(function (data) {
                     self.display = data;
@@ -18,8 +22,8 @@
                 });
             }
 
-            this.createAccount = function () {
-                accountSvc.createAccount().then(function (data) {
+            this.createAccount = function (name, balance) {
+                accountSvc.createAccount(name, balance).then(function (data) {
                     self.display = data;
                 });
             }
@@ -35,6 +39,5 @@
                     self.display = data;
                 });
             }
-
     }])
 })();

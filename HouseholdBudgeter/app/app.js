@@ -51,7 +51,7 @@
           })
           .state('dashboard.details', {
               url: "",
-              tempalteUrl: "/app/templates/dashboardDetails.html",
+              templateUrl: "/app/templates/dashboardDetails.html",
               controller: "dashboardDetailsCtrl as dashboardDetails"
           })
           .state('accounts', {
@@ -71,24 +71,31 @@
               }
           })
           .state('accounts.list.create', {
-              url: "",
+              url: "/create",
               templateUrl: "/app/templates/createAccount.html",
               controller: "createAccountCtrl as createAccount"
           })
           .state('accounts.list.details', {
-              url: "",
+              url: "/:id/details",
               templateUrl: "/app/templates/accountDetails.html",
               controller: "accountDetailsCtrl as accountDetails",
-              /*resolve: {
-                  transactions: ['transactionSvc', function (transactionSvc) {
-                      return transactionSvc.getTransactions(id);
+              resolve: {
+                  account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
+                      console.log($stateParams.id);
+                      return accountSvc.getAccount($stateParams.id);
                   }]
-              }*/
+              }
           })
             .state('accounts.list.edit', {
-                url: "",
-                templateUrl: "/app/templates/editACcount.html",
-                controller: "accountEditCtrl as accountEdit"
+                url: "/:id/edit",
+                templateUrl: "/app/templates/accountEdit.html",
+                controller: "accountEditCtrl as accountEdit",
+                resolve: {
+                    account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
+                        console.log($stateParams.id);
+                        return accountSvc.getAccount($stateParams.id);
+                    }]
+                }
             })
           .state('budget', {
               url: "/budget",
@@ -105,8 +112,23 @@
                       return budgetItemSvc.getBudgetItems();
                   }]
               }
+          })
+          .state('budget.list.createItem', {
+              url: "",
+              templateUrl: "/app/templates/createBudgetItem.html",
+              controller: "createItemCtrl as itemCtrl",
+              /*resolve: {
+                  categories: ['categorySvc', function ()]
+              }*/
+          })
+        .state('budget.list.createItem.createCategory', {
+            url: "",
+            templateUrl: "/app/templates/createCategory.html",
+            controller: "newCategoryCtrl as newCategory"
         });
     });
+
+    console.log("after states list");
 
     var serviceBase = 'http://localhost:58596/';
 

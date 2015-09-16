@@ -2,12 +2,12 @@
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
-                <h3>{{account.Name}} - Transactions</h3>
+                <h3>{{accountDetails.account.Name}} - Transactions</h3>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <table>
+                <table class="table-responsive table-bordered">
                     <thead>
                         <tr>
                             <th>
@@ -22,16 +22,28 @@
                             <th>
                                 Category
                             </th>
-                            <th>
-                                Description
-                            </th>
+                            <!--<th>
+                                Actions
+                            </th>-->
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="">
+                        <tr ng-repeat="transaction in accountDetails.account.Transactions">
                             <td>
-
+                                {{transaction.Description}}
                             </td>
+                            <td>
+                                {{transaction.Created | date:'medium'}}
+                            </td>
+                            <td>
+                                {{transaction.Amount | currency}}
+                            </td>
+                            <td>
+                                {{transaction.Category.Name}}
+                            </td>
+                            <!--<td>
+                                <a ui-sref=""
+                            </td>-->
                         </tr>
                     </tbody>
                 </table>

@@ -10,8 +10,6 @@
 
             self.display = {};
 
-            debugger;
-
             this.createAccount = function (name, balance) {
                 accountSvc.createAccount(name, balance).then(function (data) {
                     self.display = data;

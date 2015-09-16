@@ -9,8 +9,14 @@
             });
         }
 
+        f.accountDetails = function (id) {
+            return $http.post('/api/accounts/accountdetails', id).then(function (response) {
+                return response.data;
+            });
+        }
+
         f.getAccount = function (id) {
-            return $http.post('/api/accounts/getaccount', { id: id }).then(function (response) {
+            return $http.post('/api/accounts/getaccount', id).then(function (response) {
                 return response.data;
             });
         }
@@ -21,8 +27,8 @@
             });
         }
 
-        f.editAccount = function (name, balance, isArchived) {
-            return $http.post('/api/accounts/editaccount', { Name: name, Balance: balance, IsArchived: isArchived }).then(function (response) {
+        f.editAccount = function (name, balance, id) {
+            return $http.post('/api/accounts/editaccount', { Name: name, Balance: balance, Id: id }).then(function (response) {
                 return response.data;
             });
         }

@@ -19,9 +19,42 @@ namespace HouseholdBudgeter.Controllers
     public class AccountsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        
+        [HttpPost, Route("AccountDetails")]
+        [ResponseType(typeof(AccountDetailVM))]
+        public IHttpActionResult AccountDetails([FromBody]int id)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
 
-      
+            Account account = user.Household.Accounts.FirstOrDefault(a => a.Id == id);
 
+            AccountDetailVM accountDetail = new AccountDetailVM()
+            {
+                Id = account.Id,
+                Name = account.Name,
+                Balance = account.Balance,
+                HouseholdId = account.HouseholdId,
+                Archived = account.Archived,
+                Transactions = account.Transactions.Select(t => new AccountDetailVM.Transaction
+                {
+                    Id = t.Id,
+                    Description = t.Description,
+                    Amount = t.Amount,
+                    Created = t.Created,
+                    Updated = t.Updated,
+                    Reconciled = t.Reconciled,
+                    AccountId = t.AccountId,
+                    CategoryId = t.CategoryId,
+                    Archived = t.Archived,
+                    IsIncome = t.IsIncome
+
+                }).ToList()
+
+            };
+
+            return Ok(accountDetail);
+        }
+        
         // GET: api/Accounts
         [HttpPost, Route("GetAccounts")]
         public IHttpActionResult GetAccounts()

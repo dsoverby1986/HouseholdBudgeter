@@ -9,7 +9,7 @@ angular.module('HouseholdBudgeter').controller('loginCtrl', ['authSvc', '$state'
 
     self.submit = function () {
         authSvc.login(self.username, self.password).then(function (success) {
-            $state.go('dashboard');
+            $state.go('dashboard.details');
         }, function (error) {
             self.errors = error.data;
         });

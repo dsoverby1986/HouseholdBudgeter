@@ -1,6 +1,6 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('dashboardDetailsCtrl', ['budgetItemSvc', 'accountSvc', '$state', function (budgetItemSvc, accountSvc, $state) {
+        .controller('dashboardDetailsCtrl', ['$state', function ($state) {
 
             console.log('in controller');
 

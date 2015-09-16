@@ -1,0 +1,39 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                Create A New Budget Item
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" ng-model="" placeholder="Item Name" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" name="amount" placeholder="Budget Limit" ng-model="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="number" name="frequency" placeholder="Annual Frequency" ng-model="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" name="category" placeholder="Category" ng-model="" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="submit" ng-click="" name="createItemBtn">Create</button>
+            </div>
+        </div>
+        <div class="row" ui-view>
+            <div class="col-lg-12">
+                <a ui-sref="budget.list.createItem.createCategory">Create New Category</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,12 @@
                 });
             }
 
+            f.getTransactions = function (accountId) {
+                return $http.post('/api/transactions/gettransactions', accountId).then(function (response) {
+                    return response.data;
+                })
+            }
+
             f.getTransaction = function (id) {
                 return $http.post('/api/transactions/gettransaction', id).then(function (response) {
                     return response.data;

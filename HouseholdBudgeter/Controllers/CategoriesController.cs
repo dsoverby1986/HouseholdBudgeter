@@ -13,17 +13,22 @@ using HouseholdBudgeter.Models;
 
 namespace HouseholdBudgeter.Controllers
 {
+    [RoutePrefix("api/Categories")]
     public class CategoriesController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Categories
+        [Authorize]
+        [HttpPost, Route("GetCategories")]
         public IQueryable<Category> GetCategories()
         {
             return db.Categories;
         }
 
         // GET: api/Categories/5
+        [Authorize]
+        [HttpPost, Route("GetCategory")]
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> GetCategory(int id)
         {
@@ -37,6 +42,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // PUT: api/Categories/5
+        [Authorize]
+        [HttpPost, Route("EditCategory")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCategory(int id, Category category)
         {
@@ -72,6 +79,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // POST: api/Categories
+        [Authorize]
+        [HttpPost, Route("CreateCategory")]
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> PostCategory(Category category)
         {
@@ -87,6 +96,8 @@ namespace HouseholdBudgeter.Controllers
         }
 
         // DELETE: api/Categories/5
+        [Authorize]
+        [HttpPost, Route("DeleteCategory")]
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> DeleteCategory(int id)
         {

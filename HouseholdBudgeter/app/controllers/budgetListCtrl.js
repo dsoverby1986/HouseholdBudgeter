@@ -1,10 +1,12 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('budgetListCtrl', ['budgetItemSvc', '$state', function (budgetItemSvc, $state) {
+        .controller('budgetListCtrl', ['budgetItems', 'budgetItemSvc', '$state', function (budgetItems, budgetItemSvc, $state) {
 
             console.log('in controller');
 
             var self = this;
+
+            var display = budgetItems;
 
             this.getBudgetItems = function () {
                 budgetItemSvc.getBudgetItems().then(function (data) {

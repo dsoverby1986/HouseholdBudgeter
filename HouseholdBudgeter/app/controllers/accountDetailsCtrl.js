@@ -1,12 +1,20 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accountDetailsCtrl', ['id', 'transactions', '$state', function (id, transactions, $state) {
-
+        .controller('accountDetailsCtrl', ['accountSvc', '$stateParams', 'account', '$state', function (accountSvc, $stateParams, account, $state) {
+            console.log("accountDetailsCtrl - in there");
             var self = this;
 
-            this.transactions = transactions;
+            this.account = account;
 
-            console.log(transactions)
+            this.id = $stateParams.id;
+
+            this.getAccount = function (id) {
+                accountSvc.getAccount(id).then(function (data) {
+                    return self.account = data;
+                })
+            }
+
+            console.log(account)
 
         }]);
 })();

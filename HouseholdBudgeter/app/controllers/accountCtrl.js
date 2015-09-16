@@ -1,6 +1,6 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accountCtrl', ['accountSvc', '$state', function (accountSvc, $state) {
+        .controller('accountCtrl', ['accountSvc', '$state', '$stateParams', function (accountSvc, $state, $stateParams) {
 
             var self = this;
 

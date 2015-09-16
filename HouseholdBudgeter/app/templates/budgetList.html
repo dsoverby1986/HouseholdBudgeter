@@ -1,1 +1,51 @@
-﻿<h2>I am going to have a list of the budget items for this household displayed on this page.</h2>
+﻿<div class="row">
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
+                <a ui-sref="budget.list.createItem">Create New Item</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                Probably have a list of budget items here in a table.
+            </div>
+            <div>
+                <table class="table-responsive table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Frequency
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in budgetList.display">
+                            <td>
+                                {{item.Name}}
+                            </td>
+                            <td>
+                                {{item.Category}}
+                            </td>
+                            <td>
+                                {{item.Amount}}
+                            </td>
+                            <td>
+                                {{item.Frequency}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6" ui-view></div>
+</div>

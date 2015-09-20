@@ -1,0 +1,73 @@
+﻿<h3>Edit Transaction form here</h3>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <input placeholder="Description" ng-model="editTransCtrl.trans.Description" type="text" name="description" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input placeholder="Amount" ng-model="editTransCtrl.trans.Amount" type="text" name="amount" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" placeholder="Reconciled" ng-model="editTransCtrl.trans.Reconciled" name="reconciled" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" name="category" placeholder="Category"
+                       ng-model="editTransCtrl.trans.Category.Name"
+                       typeahead-on-select="editTransCtrl.trans.Category = $item"
+                       typeahead="category as category.Name for category in accountsList.categories | filter:$viewValue | limitTo:8"
+                       class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="btn-group">
+                    <label class="btn btn-success" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'True'">Income</label>
+                    <label class="btn btn-danger" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'False'">Expense</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="submit" ng-click="editTransCtrl.editTrans(editTransCtrl.trans)" name="editTransBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+

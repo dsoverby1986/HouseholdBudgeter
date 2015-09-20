@@ -249,7 +249,7 @@ namespace HouseholdBudgeter.Controllers
         }
 
         [HttpPost, Route("ArchiveAccount")]
-        public async Task<IHttpActionResult> PutArchiveAccount(int id)
+        public async Task<IHttpActionResult> PutArchiveAccount([FromBody]int id)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             var account = db.Accounts.Find(id);

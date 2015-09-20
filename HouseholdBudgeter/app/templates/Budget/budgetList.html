@@ -1,0 +1,58 @@
+﻿<div class="row">
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
+                <a ui-sref="budget.list.createItem">Create New Item</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                Probably have a list of budget items here in a table.
+            </div>
+            <div>
+                <table class="table-responsive table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Amount
+                            </th>
+                            <th>
+                                Frequency
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in budgetList.display">
+                            <td>
+                                {{item.Name}}
+                            </td>
+                            <td>
+                                {{item.Amount | currency}}
+                            </td>
+                            <td>
+                                {{item.Frequency}}
+                            </td>
+                            <td>
+                                {{item.Category.Name}}
+                            </td>
+                            <td>
+                                <a ui-sref="budget.list.editItem({ id: item.Id })">Edit</a> <span> | </span>
+                                <a ng-click="budget.deleteBudgetItem(item.Id)">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6" ui-view></div>
+</div>

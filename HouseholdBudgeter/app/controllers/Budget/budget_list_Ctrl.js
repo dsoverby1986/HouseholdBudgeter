@@ -1,0 +1,28 @@
+﻿(function () {
+    angular.module('HouseholdBudgeter')
+        .controller('budget_list_Ctrl', ['categories', 'budgetItems', 'budgetItemSvc', '$state', function (categories, budgetItems, budgetItemSvc, $state) {
+
+            console.log('in controller');
+
+            var self = this;
+
+            this.display = budgetItems;
+
+            this.categories = categories;
+
+            console.log(categories);
+
+            this.getBudgetItems = function () {
+                budgetItemSvc.getBudgetItems().then(function (data) {
+                    self.display = data;
+                });
+            }
+
+            this.deleteBudgetItem = function (id) {
+                budgetItemSvc.deleteBudgetItem(id).then(function (data) {
+                    self.display = data;
+                })
+            }
+
+        }]);
+})();

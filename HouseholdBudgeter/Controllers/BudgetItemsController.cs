@@ -34,7 +34,7 @@ namespace HouseholdBudgeter.Models
         // GET: api/BudgetItems/5
         [HttpPost, Route("BudgetItem")]
         [ResponseType(typeof(BudgetItem))]
-        public async Task<IHttpActionResult> GetBudgetItem(int id)
+        public async Task<IHttpActionResult> GetBudgetItem([FromBody]int id)
         {
             BudgetItem budgetItem = await db.BudgetItems.FindAsync(id);
             if (budgetItem == null)
@@ -46,7 +46,7 @@ namespace HouseholdBudgeter.Models
         }
 
         // PUT: api/BudgetItems/5
-        [Route("EditBudgetItem")]
+        [HttpPost, Route("EditBudgetItem")]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutBudgetItem(BudgetItem budgetItem)
         {
@@ -69,6 +69,27 @@ namespace HouseholdBudgeter.Models
             {
                 item.CategoryId = budgetItem.CategoryId;
                 item.Category = db.Categories.Find(budgetItem.CategoryId);
+            }
+
+            if (budgetItem.Category.Name != item.Category.Name)
+            {
+                var catInQuestion = db.Categories.FirstOrDefault(c => c.Name == budgetItem.Category.Name);
+
+                if (catInQuestion == null)
+                {
+                    Category newCat = new Category()
+                    {
+                        Name = budgetItem.Category.Name
+                    };
+                    db.Categories.Add(newCat);
+                    item.Category = newCat;
+                }
+                else
+                {
+                    item.Category = catInQuestion;
+                    item.CategoryId = catInQuestion.Id;
+
+                }
             }
 
             if (budgetItem.Frequency != item.Frequency)
@@ -111,7 +132,21 @@ namespace HouseholdBudgeter.Models
 
             budgetItem.HouseHoldId = (int)user.HouseholdId;
             budgetItem.Household = user.Household;
-            budgetItem.Category = db.Categories.Find(budgetItem.CategoryId);
+            if (budgetItem.Category.Id != 0)
+            {
+                budgetItem.CategoryId = budgetItem.Category.Id;
+            }
+            else
+            {
+                Category newCat = new Category()
+                {
+                    Name = budgetItem.Category.Name
+                };
+
+                db.Categories.Add(newCat);
+                budgetItem.Category = newCat;
+            }
+
 
             db.BudgetItems.Add(budgetItem);
             await db.SaveChangesAsync();

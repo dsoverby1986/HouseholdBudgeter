@@ -56,9 +56,9 @@ namespace HouseholdBudgeter.Controllers
 
         // GET: api/Transactions/5
         [Authorize]
-        [HttpPost, Route("Transaction")]
+        [HttpPost, Route("GetTransaction")]
         [ResponseType(typeof(Transaction))]
-        public async Task<IHttpActionResult> GetTransaction(int id)
+        public async Task<IHttpActionResult> GetTransaction([FromBody]int id)
         {
             Transaction transaction = await db.Transactions.FindAsync(id);
             if (transaction == null)
@@ -101,6 +101,12 @@ namespace HouseholdBudgeter.Controllers
                 trans.Account.Balance -= trans.Amount;
                 trans.Amount = alteredTrans.Amount;
                 trans.Account.Balance += alteredTrans.Amount;
+            }
+
+            if(alteredTrans.Category != trans.Category)
+            {
+                trans.Category = alteredTrans.Category;
+                trans.CategoryId = trans.Category.Id;
             }
 
             trans.Updated = DateTimeOffset.Now;
@@ -148,7 +154,7 @@ namespace HouseholdBudgeter.Controllers
         [Authorize]
         [HttpPost, Route("DeleteTransaction")]
         [ResponseType(typeof(Transaction))]
-        public async Task<IHttpActionResult> DeleteTransaction(int id)
+        public async Task<IHttpActionResult> DeleteTransaction([FromBody]int id)
         {
             Transaction transaction = await db.Transactions.FindAsync(id);
             var user = db.Users.Find(User.Identity.GetUserId());

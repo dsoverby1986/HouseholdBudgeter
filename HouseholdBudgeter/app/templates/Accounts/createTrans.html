@@ -1,0 +1,73 @@
+﻿<h3>Create Transaction form here</h3>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <input placeholder="Description" ng-model="createTransCtrl.transaction.description" type="text" name="description" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input placeholder="Amount" ng-model="createTransCtrl.transaction.amount" type="text" name="amount" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" placeholder="Reconciled" ng-model="createTransCtrl.transaction.reconciled" name="reconciled" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" name="category" placeholder="Category"
+                       ng-model="createTransCtrl.transaction.category.Name"
+                       typeahead-on-select="createTransCtrl.transaction.category = $item"
+                       typeahead="category as category.Name for category in createTransCtrl.categories | filter:$viewValue | limitTo:8"
+                       class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="btn-group">
+                    <label class="btn btn-success" ng-model="createTransCtrl.transaction.isIncome" btn-radio="'True'">Income</label>
+                    <label class="btn btn-danger" ng-model="createTransCtrl.transaction.isIncome" btn-radio="'False'">Expense</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <button type="submit" ng-click="createTransCtrl.createTrans(createTransCtrl.transaction)" name="createTransBtn">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+

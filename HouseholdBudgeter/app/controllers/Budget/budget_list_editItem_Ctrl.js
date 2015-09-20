@@ -9,6 +9,8 @@
 
                 var self = this;
 
+
+
                 this.model = {
                 };
 
@@ -17,8 +19,17 @@
                         self.item = data;
                     });
                 }
+
+           
+
                 //data binding not correct. coming up with inappropriate values when saving edited budget item. figue something out guy
                 this.editBudgetItem = function (budgetItem) {
+
+                    if (typeof (budgetItem.category) == "string")
+                        budgetItem.category = { id: 0, name: budgetItem.category };
+
+                    budgetItem.categoryId = budgetItem.Category.Id;
+
                     budgetItemSvc.editBudgetItem(budgetItem).then(function (data) {
                         self.item = data;
                     })

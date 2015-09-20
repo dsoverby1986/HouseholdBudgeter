@@ -20,11 +20,8 @@
 
                 this.editTrans = function () {
                     transactionSvc.editTransaction(trans).then(function(){
-                        $state.go('accounts.list.details').then(function(){
-                            $state.go($state.current, null, { reload: true });
+                        $state.go('accounts.list.details', null, { reload: true });
                         })
-                    })
-                }
-
+                    }
             }]);
 })();

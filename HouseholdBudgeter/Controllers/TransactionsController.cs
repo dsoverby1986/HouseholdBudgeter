@@ -73,47 +73,81 @@ namespace HouseholdBudgeter.Controllers
         [Authorize]
         [HttpPost, Route("EditTransaction")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutTransaction(Transaction alteredTrans)
+        public async Task<IHttpActionResult> PutTransaction(Transaction trans)
         {
+            //check the incoming model's validity
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var trans = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == alteredTrans.Id);
+            //look up the current user
+            var user = db.Users.Find(User.Identity.GetUserId());
 
-            if (trans == null)
+            //check the current user's authenticity
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
+
+            if (trans.Category != null)
+            {
+                db.Entry(trans.Category).State = trans.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
+            }
+            else
             {
                 return BadRequest();
             }
 
-            if (!alteredTrans.IsIncome)
-            {
-                if (alteredTrans.Amount > 0)
-                    alteredTrans.Amount *= -1;
+            //if the incoming transaction is an expense
+            if (!trans.IsIncome)
+            {//change the value to reflect an expense
+                if (trans.Amount > 0)
+                    trans.Amount *= -1;
             }
-            else
-                if (alteredTrans.Amount < 0)
-                    alteredTrans.Amount *= -1;
+            else//if for some reason the user is editing and sets the amount of an income tranaction to be negative change the value to reflect an income
+                if (trans.Amount < 0)
+                    trans.Amount *= -1;
 
-            if (alteredTrans.Amount != null)
-            {
-                trans.Account.Balance -= trans.Amount;
-                trans.Amount = alteredTrans.Amount;
-                trans.Account.Balance += alteredTrans.Amount;
-            }
+            //look up the transaction in the database
+            var existingTrans = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == trans.Id);
 
-            if(alteredTrans.Category != trans.Category)
+            //use the 
+            var etaBalance = existingTrans.Account.Balance;
+            var etaAmount = existingTrans.Amount;
+
+            etaBalance -= etaAmount;
+            etaBalance += trans.Amount;
+
+            var account = db.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
+
+            account.Balance = etaBalance;
+
+            db.Entry(trans).State = EntityState.Modified;
+
+            if (trans.Category.Id != 0)
             {
-                trans.Category = alteredTrans.Category;
                 trans.CategoryId = trans.Category.Id;
             }
 
             trans.Updated = DateTimeOffset.Now;
 
-            db.Update(trans, "Description", "Amount", "Reconciled", "CategoryId", "Archived");
-
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TransactionExists(trans.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return Ok(trans);
         }
@@ -124,11 +158,14 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> PostTransaction(Transaction trans)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            
+            if (trans.Category != null)
+            {
+                db.Entry(trans.Category).State = trans.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
             if (!trans.IsIncome)
@@ -141,8 +178,13 @@ namespace HouseholdBudgeter.Controllers
                     trans.Amount *= -1;
 
             trans.Created = DateTimeOffset.Now;
-            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
+            var account = db.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
             account.Balance = account.Balance + trans.Amount;
+
+            if (trans.Category.Id != 0)
+            {
+                trans.CategoryId = trans.Category.Id;
+            }
 
             db.Transactions.Add(trans);
             await db.SaveChangesAsync();

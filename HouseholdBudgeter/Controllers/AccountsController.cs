@@ -138,35 +138,33 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PutAccount(Account account)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var accountIsHad = user.Household.Accounts.Any(a => a.Id == account.Id);
+            //var existingAccount = db.Accounts.FirstOrDefault(a => a.Id == account.Id);
 
             var existingAccount = user.Household.Accounts.FirstOrDefault(a => a.Id == account.Id);
 
-            if(!accountIsHad)
+            if (account == null)
             {
                 return Ok("You do not have permission to edit this account");
             }
 
-            if(account.Name != existingAccount.Name)
-            {
-                existingAccount.Name = account.Name;
-            }
-
-            if(account.Balance != existingAccount.Balance)
+            if (account.Balance != existingAccount.Balance)
             {
                 decimal adjustmentAmount = account.Balance - existingAccount.Balance;
 
                 Transaction trans = new Transaction()
                 {
-                    Description = "Manual Account Balance Adjustment.",
-                    AccountId = existingAccount.Id,
-                    Account = existingAccount,
+                    Description = "Manual Account Balance Adjustment",
                     Amount = adjustmentAmount,
-                    Category = db.Categories.Find(1),
                     Created = DateTimeOffset.Now,
-                    CategoryId = 1
+                    AccountId = account.Id,
+                    CategoryId = 5
                 };
 
                 existingAccount.Balance = account.Balance;
@@ -174,9 +172,19 @@ namespace HouseholdBudgeter.Controllers
                 db.Transactions.Add(trans);
             }
 
+            if (account.Name != existingAccount.Name)
+            {
+                existingAccount.Name = account.Name;
+            }
+            /*
+            if (account != null)
+            {
+                db.Entry(account).State = EntityState.Modified;
+            }
+            */
             await db.SaveChangesAsync();
 
-            return Ok(existingAccount);
+            return Ok(account);
         }
 
         [HttpPost, Route("AdjustBalance")]
@@ -235,7 +243,7 @@ namespace HouseholdBudgeter.Controllers
             {
                 Description = "Account Initialization",
                 Amount = account.Balance,
-                CategoryId = 1,
+                CategoryId = 6,
                 Created = DateTimeOffset.Now,
                 AccountId = account.Id,
                 IsIncome = true
@@ -244,7 +252,7 @@ namespace HouseholdBudgeter.Controllers
             db.Transactions.Add(trans);
             await db.SaveChangesAsync();
             
-            return Ok(account);
+            return Ok(account.Id);
             //"The " + account.Name + " account has been created for the " + account.Household.Name + " household. A transaction showing the initialization of this account has also been created." + 
         }
 

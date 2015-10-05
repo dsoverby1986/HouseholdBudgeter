@@ -1,5 +1,5 @@
 ﻿(function () {
-    var app = angular.module('HouseholdBudgeter', ['ui.router', 'ui.bootstrap', 'LocalStorageModule']);
+    var app = angular.module('HouseholdBudgeter', ['ui.router', 'ui.bootstrap', 'LocalStorageModule', 'nvd3', 'trNgGrid']);
 
     app.config(function ($stateProvider, $urlRouterProvider) {
         //
@@ -9,13 +9,17 @@
         //
         // Now set up the states
         //for one page to be distinguished from another page an entry must go here for that page
-        console.log("approaching stateprovider");
         $stateProvider
           .state('login', {
               url: "/login",
               templateUrl: "/app/templates/user/login.html",
               controller: "login_Ctrl as login"
           })
+            .state('register', {
+                url: "/register",
+                templateUrl: "/app/templates/user/register.html",
+                controller: "register_Ctrl as register"
+            })
 
           .state('home', {
               url: "/home",
@@ -45,13 +49,8 @@
           })
           .state('dashboard', {
               url: "/dashboard",
-              abstract: true,
               templateUrl: "/app/templates/dashboard/dashboard.html",
-              controller: "dashboard_Ctrl as dashboard"
-          })
-          .state('dashboard.details', {
-              url: "",
-              templateUrl: "/app/templates/dashboard/dashboardDetails.html",
+              //controller: "dashboard_Ctrl as dashboard"
               controller: "dashboard_details_Ctrl as dashboardDetails"
           })
           .state('accounts', {
@@ -63,16 +62,7 @@
           .state('accounts.list', {
               url: "",
               templateUrl: "/app/templates/accounts/accountsList.html",
-              controller: "accounts_list_Ctrl as accountsList",
-              resolve: {
-                  accounts: ['accountSvc', function (accountSvc) {
-                      console.log("in the accounts.list state")
-                      return accountSvc.getAccounts();
-                  }],
-                  categories: ['categorySvc', function (categorySvc) {
-                      return categorySvc.getCategories();
-                  }]
-              }
+              controller: "accounts_list_Ctrl as accountsList"
           })
           .state('accounts.list.create', {
               url: "/create",
@@ -85,7 +75,6 @@
               controller: "account_list_details_Ctrl as accountDetails",
               resolve: {
                   account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
-                      console.log($stateParams.id);
                       return accountSvc.getAccount($stateParams.id);
                   }]
               }
@@ -96,7 +85,6 @@
                 controller: "accounts_list_edit_Ctrl as accountEdit",
                 resolve: {
                     account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
-                        console.log($stateParams.id);
                         return accountSvc.getAccount($stateParams.id);
                     }]
                 }
@@ -107,8 +95,6 @@
                 controller: "accounts_list_details_createTrans_Ctrl as createTransCtrl",
                 resolve: {
                     categories: ['$stateParams', 'categorySvc', function ($stateParams, categorySvc) {
-                        console.log($stateParams.id);
-                        console.log('inside createtrans state resolve function');
                         return categorySvc.getCategories();
                     }]
                 }
@@ -119,8 +105,6 @@
                 controller: "accounts_list_details_editTrans_Ctrl as editTransCtrl",
                 resolve: {
                     trans: ['transactionSvc', '$stateParams', function (transactionSvc, $stateParams) {
-                        console.log("inside resolve function calling to transactionSvc");
-                        console.log($stateParams.id);
                         return transactionSvc.getTransaction($stateParams.transId);
                     }]
                 }
@@ -141,6 +125,9 @@
                   }],
                   categories: ['categorySvc', function (categorySvc) {
                       return categorySvc.getCategories();
+                  }],
+                  household: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getHousehold();
                   }]
               }
           })
@@ -160,16 +147,14 @@
               controller: "budget_list_editItem_Ctrl as editItem",
               resolve: {
                   budgetItem: ['budgetItemSvc', '$stateParams', function (budgetItemSvc, $stateParams) {
-                      console.log($stateParams.id);
                       return budgetItemSvc.getBudgetItem($stateParams.id);
                   }]
               }
           })
     });
 
-    console.log("after states list");
-
     var serviceBase = 'http://localhost:58596/';
+    //var serviceBase = 'http://dsomoney.azurewebsites.net/';
 
     app.constant('ngAuthSettings', {
         apiServiceBaseUri: serviceBase
@@ -179,8 +164,27 @@
         $httpProvider.interceptors.push('authInterceptorSvc');
     });
 
-    app.run(['authSvc', function (authService) {
+    app.run(['$rootScope', '$state', '$stateParams', 'authSvc', function ($rootScope, $state, $stateParams, authService) {
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
         authService.fillAuthData();
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            if (toState.data && toState.data.requiresHousehold === true) {
+                if (!authService.authentication.isAuth) {
+                    event.preventDefault();
+                    $state.go('login');
+                }
+
+                if (authService.authentication.householdId == null ||
+                    authService.authentication.householdId == "") {
+                    event.preventDefault();
+                    $state.go('household.join');
+                }
+            }
+        });
     }]);
 
 })();
+
+

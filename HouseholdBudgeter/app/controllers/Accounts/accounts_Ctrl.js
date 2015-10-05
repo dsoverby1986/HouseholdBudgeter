@@ -1,6 +1,6 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accounts_Ctrl', ['accountSvc', '$state', '$stateParams', function (accountSvc, $state, $stateParams) {
+        .controller('accounts_Ctrl', ['confirmModalSvc', '$scope', 'accountSvc', '$state', '$stateParams', function (confirmModalSvc, $scope, accountSvc, $state, $stateParams) {
 
             var self = this;
 
@@ -36,12 +36,27 @@
                 });
             }
 
+            this.deleteTrans = function (transId) {
+                return confirmModalSvc.open("Are you sure you want to delete this transaction?", function () {
+                    return transactionSvc.deleteTransaction(transId)
+                }, function () {
+                    $scope.$root.$broadcast('transaction-updated');
+                    $state.go('accounts.list.details', null, { reload: true });
+                }
+                );
+            };
+
             this.archiveAccount = function (id) {
-                console.log(id);
-                accountSvc.archiveAccount(id).then(function (data) {
-                    self.display = data;
-                    console.log(data);
-                });
+                return confirmModalSvc.open("If you archive this account you and all members of your household will no longer have access to this account " + 
+                    "or any transactions belonging to this account. Are you sure you want to archive this account?", function () {
+                        return accountSvc.archiveAccount(id)
+                    }, function () {
+                        $scope.$root.$broadcast('transaction-updated');
+                        $state.go('accounts.list', null, { reload: true });
+                    }, "md"/*, function () {
+                        $state.go('accounts.list', null, { reload: true });
+                    }*/
+                );
             }
     }])
 })();

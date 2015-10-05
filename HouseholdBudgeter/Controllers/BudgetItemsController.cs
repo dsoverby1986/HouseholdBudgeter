@@ -55,66 +55,36 @@ namespace HouseholdBudgeter.Models
                 return BadRequest(ModelState);
             }
 
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var item = db.BudgetItems.Find(budgetItem.Id);
-            var itemIshad = user.Household.BudgetItems.Any(i => i.Id == budgetItem.Id);
-
-            if (!itemIshad)
-                return Ok("You do not have permission to alter this budget item.");
-
-            if (budgetItem.Amount != item.Amount)
-                item.Amount = budgetItem.Amount;
-
-            if (budgetItem.CategoryId != 0 && budgetItem.CategoryId != item.CategoryId)
+            if (budgetItem.Category != null)
             {
-                item.CategoryId = budgetItem.CategoryId;
-                item.Category = db.Categories.Find(budgetItem.CategoryId);
+                db.Entry(budgetItem.Category).State = budgetItem.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
-            if (budgetItem.Category.Name != item.Category.Name)
+            var existingItem = db.BudgetItems.FirstOrDefault(i => i.Id == budgetItem.Id);
+
+            if (budgetItem.Name != existingItem.Name)
             {
-                var catInQuestion = db.Categories.FirstOrDefault(c => c.Name == budgetItem.Category.Name);
-
-                if (catInQuestion == null)
-                {
-                    Category newCat = new Category()
-                    {
-                        Name = budgetItem.Category.Name
-                    };
-                    db.Categories.Add(newCat);
-                    item.Category = newCat;
-                }
-                else
-                {
-                    item.Category = catInQuestion;
-                    item.CategoryId = catInQuestion.Id;
-
-                }
+                existingItem.Name = budgetItem.Name;
             }
 
-            if (budgetItem.Frequency != item.Frequency)
-                item.Frequency = budgetItem.Frequency;
-
-            if (budgetItem.Name != null && budgetItem.Name != item.Name)
-                item.Name = budgetItem.Name;
-
-            try
+            if (budgetItem.Amount != existingItem.Amount)
             {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BudgetItemExists(budgetItem.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                existingItem.Amount = budgetItem.Amount;
             }
 
-            return Ok(item);
+            if (budgetItem.CategoryId != existingItem.CategoryId)
+            {
+                existingItem.CategoryId = budgetItem.CategoryId;
+            }
+
+            if (budgetItem.Frequency != existingItem.Frequency)
+            {
+                existingItem.Frequency = budgetItem.Frequency;
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok(budgetItem);
         }
 
         // POST: api/BudgetItems
@@ -128,25 +98,21 @@ namespace HouseholdBudgeter.Models
                 return BadRequest(ModelState);
             }
 
+            if (budgetItem.Category != null)
+            {
+                db.Entry(budgetItem.Category).State = budgetItem.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
+            }
+
             var user = db.Users.Find(User.Identity.GetUserId());
 
+            budgetItem.Category.HouseholdId = user.HouseholdId;
+
             budgetItem.HouseHoldId = (int)user.HouseholdId;
-            budgetItem.Household = user.Household;
+            
             if (budgetItem.Category.Id != 0)
             {
                 budgetItem.CategoryId = budgetItem.Category.Id;
             }
-            else
-            {
-                Category newCat = new Category()
-                {
-                    Name = budgetItem.Category.Name
-                };
-
-                db.Categories.Add(newCat);
-                budgetItem.Category = newCat;
-            }
-
 
             db.BudgetItems.Add(budgetItem);
             await db.SaveChangesAsync();

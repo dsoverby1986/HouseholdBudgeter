@@ -6,8 +6,6 @@
 
             this.display = household;
 
-            console.log(household)
-
             this.inviteEmail = "";
 
             this.getHouseholdUsers = function () {

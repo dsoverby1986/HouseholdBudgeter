@@ -1,4 +1,99 @@
 ﻿<div class="row">
+    <div class="col-md-11">
+        <h1 class="page-header">
+            Edit {{editItem.budgetItem.Name}} Budget Item
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editItemName" style="width:100px;">Item Name</label>
+                                <input placeholder="Item Name" style="width:500px; display:inline-block;" ng-model="editItem.budgetItem.Name"
+                                       type="text" name="name" id="editItemName" class="form-control" autofocus />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editItemLimit" style="width:100px;">Limit Amount</label>
+                                <input placeholder="Limit Amount" style="width:500px; display:inline-block;" ng-model="editItem.budgetItem.Amount"
+                                       type="text" name="limit" id="editItemLimit" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editItemFreq" style="width:100px;">Frequency</label>
+                                <input type="text" placeholder="Annual Frequency" style="width:500px; display: inline-block" ng-model="editItem.budgetItem.Frequency"
+                                       name="frequency" id="editItemFreq" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editItemCat" style="width:100px; display:inline-block;">Category</label>
+                                <input type="text" name="category" placeholder="Category"
+                                       ng-model="editItem.budgetItem.Category" style="width:500px; display:inline-block;"
+                                       typeahead="category as category.Name for category in budgetList.categories | filter:$viewValue | limitTo:8"
+                                       id="editItemCat" class="form-control">
+                                <!--<input type="text" name="category" placeholder="Category"
+                                       ng-model="editItemCtrl.model.Category"
+                                       typeahead="category as category.Name for category in editItemCtrl.categories | filter:$viewValue | limitTo:8"
+                                       class="form-control">-->
+                            </div>
+                        </div>
+                        <!--typeahead-on-select="editItemCtrl.model.Category = $item"-->
+                        <div class="row" style="padding-bottom:10px;">
+                            <!--<div class="col-lg-1">
+                                <label for="editTransType" class="">Type</label>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="btn-group" id="editTransType">
+                                    <label class="btn btn-success" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'True'">Income</label>
+                                    <label class="btn btn-danger" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'False'">Expense</label>
+                                </div>
+                            </div>-->
+                            <br />
+                            <br />
+
+                            <div style="margin-left:30px;">
+                                <a ui-sref="budget.list">Back To Budget Item List</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0%;">
+                        <div class="row" style="padding-left:0%;">
+                            <div style="padding-left:0%;">
+                                <button type="submit" style="height:165px; width:30px; margin-left:-50px;"
+                                        ng-click="editItem.editBudgetItem(editItem.budgetItem)"
+                                        name="editItemBtn" class="btn btn-primary">
+                                    <span style="margin-left:-2px;">S</span><br /><br /><span style="margin-left:-3px;">A</span><br /><br />
+                                    <span style="margin-left:-3px;">V</span><br /><br /><span style="margin-left:-2px;">E</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+
+
+
+<!--
+
+
+
+<div class="row">
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
@@ -24,16 +119,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <input type="text" name="category" placeholder="Category"
-                       ng-model="editItem.budgetItem.Category.Name"
-                       typeahead-on-select="editItem.budgetItem.Category = $item"
+                       ng-model="editItem.budgetItem.Category"
                        typeahead="category as category.Name for category in budgetList.categories | filter:$viewValue | limitTo:8"
                        class="form-control">
             </div>
         </div>
-        <div class="row">
+        <!--typeahead-on-select="editItem.budgetItem.Category = $item"-->
+    <!--    <div class="row">
             <div class="col-lg-12">
                 <button type="submit" ng-click="editItem.editBudgetItem(editItem.budgetItem)" name="editItemBtn">Save</button>
             </div>
         </div>
     </div>
-</div>
+</div>-->

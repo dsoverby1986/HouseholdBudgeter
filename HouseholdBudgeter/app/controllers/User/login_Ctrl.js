@@ -9,10 +9,11 @@ angular.module('HouseholdBudgeter').controller('login_Ctrl', ['authSvc', '$state
 
     self.submit = function () {
         authSvc.login(self.username, self.password).then(function (success) {
-            $state.go('dashboard.details');
+            if (success.householdId == "" || success.householdId == null)
+                $state.go('household.join');
+            $state.go('dashboard');
         }, function (error) {
-            self.errors = error.data;
+            self.errors = errors.error_description;
         });
     }
-
 }])

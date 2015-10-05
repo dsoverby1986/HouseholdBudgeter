@@ -1,7 +1,7 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accounts_list_details_createTrans_Ctrl', ['$stateParams', 'transactionSvc', 'categories', 'categorySvc', '$state',
-            function ($stateParams, transactionSvc, categories, categorySvc, $state) {
+        .controller('accounts_list_details_createTrans_Ctrl', ['$stateParams', 'transactionSvc', 'categories', 'categorySvc', '$state','$scope',
+            function ($stateParams, transactionSvc, categories, categorySvc, $state,$scope) {
 
                 var self = this;
 
@@ -17,21 +17,20 @@
                         Name: ""
                     },
                     accountId: $stateParams.id,
-                    isIncome: ""
+                    isIncome: false
                 }
 
                 this.getCategories = function () {
                     categorySvc.getCategories().then(function (data) {
                         self.categories = data;
-                        console.log(data);
                     })
                 }
 
                 this.createTrans = function () {
-                    console.log(self.transaction);
-                    transactionSvc.createTransaction(self.transaction).then(function (data) {
-                        self.display = data;
-                        console.log(data);
+                    self.transaction.CategoryId = self.transaction.category.Id;
+                    transactionSvc.createTransaction(self.transaction).then(function () {
+                        $scope.$root.$broadcast('transaction-updated');
+                        $state.go('accounts.list.details', null, { reload: true });
                     })
                 }
         }]);

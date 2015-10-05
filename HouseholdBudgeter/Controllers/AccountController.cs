@@ -270,7 +270,7 @@ namespace HouseholdBudgeter.Controllers
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
@@ -333,7 +333,7 @@ namespace HouseholdBudgeter.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, DisplayName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -341,13 +341,13 @@ namespace HouseholdBudgeter.Controllers
             {
                 return GetErrorResult(result);
             }
-
+            /*
             if (model.InvitedEmail != null && model.Code != null)
             {
-                return await JoinHousehold(model.InvitedEmail, model.Code);
+                return await JoinHousehold();
             }
-
-            return Ok(user.Email + " is now a registered user.");
+            */
+            return Ok(model);
         }
 
         // POST api/Account/RegisterExternal
@@ -461,13 +461,13 @@ namespace HouseholdBudgeter.Controllers
         [Authorize]
         [HttpPost, Route("CreateHousehold")]
         [ResponseType(typeof(Household))]
-        public async Task<IHttpActionResult> PostHousehold(string name)
+        public IHttpActionResult PostHousehold(Household householdIn)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
             Household household = new Household()
             {
-                Name = name
+                Name = householdIn.Name
             };
 
             if (!ModelState.IsValid)
@@ -484,7 +484,7 @@ namespace HouseholdBudgeter.Controllers
 
             user.HouseholdId = household.Id;
 
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(household);
         }
@@ -507,13 +507,13 @@ namespace HouseholdBudgeter.Controllers
         [Authorize]
         [HttpPost, Route("JoinHousehold")]
         [ResponseType(typeof(Household))]
-        public async Task<IHttpActionResult> JoinHousehold(string inviteEmail, string inviteCode)
+        public async Task<IHttpActionResult> JoinHousehold(Invitaton inviteInfo)
         {
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var outuser = db.Users.Where(u => u.Email == inviteEmail).FirstOrDefault();
+            var outuser = db.Users.Where(u => u.Email == inviteInfo.InvitedEmail).FirstOrDefault();
 
-            var invite = db.Invitation.Where(i => i.Code == inviteCode && i.InvitedEmail == inviteEmail).FirstOrDefault();
+            var invite = db.Invitation.Where(i => i.Code == inviteInfo.Code && i.InvitedEmail == inviteInfo.InvitedEmail).FirstOrDefault();
 
             if(invite != null){
                 if(user != null)

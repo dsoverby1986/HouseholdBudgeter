@@ -3,7 +3,7 @@
 
         var f = {};
 
-        f.open = function (message, onConfirm, onConfirmSuccess, size) {
+        f.open = function (message, onConfirm, onConfirmSuccess, size, onDeny) {
             $modal.open({
                 animation: true,
                 template:  '<div class="modal-body">' +
@@ -11,7 +11,7 @@
                             '</div>' +
                             '<div class="modal-footer">' +
                                 '<button class="btn btn-danger" type="button" ng-click="confirm.yes()">Yes</button>' +
-                                '<button class="btn btn-danger" type="button"ng-click="confirm.no()">Nope</button>' +
+                                '<button class="btn btn-success" type="button"ng-click="confirm.no()">Nope</button>' +
                             '</div>',
                 controller: ['$modalInstance', function ($modalInstance) {
 
@@ -24,7 +24,8 @@
                     }
 
                     this.no = function () {
-                        $modalInstance.close();
+                        //$modalInstance.close().then();
+                         return $q.when($modalInstance.close()).then(onDeny);
                     }
                 }],
                 controllerAs: 'confirm',

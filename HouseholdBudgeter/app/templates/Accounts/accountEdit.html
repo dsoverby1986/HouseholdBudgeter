@@ -1,18 +1,169 @@
 ﻿<div class="row">
+    <div class="col-md-11">
+        <h1 class="page-header">
+            Edit {{accountEdit.account.Name}} Account
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editAccountName" style="width:125px;">Account Name</label>
+                                <input placeholder="Account Name" style="width:475px; display:inline-block;" ng-model="accountEdit.account.Name" type="text" name="name" id="editAccountName" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="editAccountBalance" style="width:125px;">Account Balance</label>
+                                <input placeholder="Account Balance" style="width:475px; display:inline-block;" ng-model="accountEdit.account.Balance" type="text" name="Balance" id="editAccountBalance" class="form-control" required />
+                            </div>
+                        </div>
+                        <br />
+                        <div style="margin-left:30px;">
+                            <a ui-sref="accounts.list">Back To Accounts</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0%;">
+                        <div class="row" style="padding-left:0%;">
+                            <div style="padding-left:0%;">
+                                <button type="submit" style="height:80px; width:30px; margin-left:-50px; padding-bottom:50px;"
+                                        ng-click="accountEdit.editAccount(accountEdit.account)"
+                                        name="editTransBtn" class="btn btn-primary">
+                                    <span><span style="margin-left:-2px; display:block; font-size:small">S</span><span style="margin-left:-2px; display:block; font-size:small">A</span><span style="margin-left:-2px; display:block; font-size:small">V</span><span style="margin-left:-2px; display:block; font-size:small;">E</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<div class="row">
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
-                <h3>{{accountEdit.account.Name}} - Balance: {{accountEdit.account.Balance | currency}}</h3>
+                <h3>Edit {{accountEdit.account.Name}}</h3>
             </div>
         </div>
         <div class="row">
             <div class="col-leg-12">
-                <input type="text" placeholder="Account Name" name="Name" id="name" ng-model="accountEdit.name" />
+                <input type="text" placeholder="Account Name" name="Name" id="name" ng-model="accountEdit.account.Name" />
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <input type="text" placeholder="Account Balance" name="Balance" id="balance" ng-model="accountEdit.balance" />
+                <input type="text" placeholder="Account Balance" name="Balance" id="balance" ng-model="accountEdit.account.Balance | currency" />
             </div>
         </div>
         <div class="row">
@@ -20,5 +171,10 @@
                 <button type="submit" ng-click="accountEdit.editAccount(accountEdit.name, accountEdit.balance, accountEdit.account.Id)">Save</button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <a ui-sref="accounts.list">Back To Accounts</a>
+            </div>
+        </div>
     </div>
-</div>
+</div>-->

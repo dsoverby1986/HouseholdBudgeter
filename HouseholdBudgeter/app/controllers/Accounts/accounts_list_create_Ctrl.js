@@ -1,7 +1,7 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accounts_list_create_Ctrl', ['accountSvc', '$state', function (accountSvc, $state) {
-            console.log('in controller');
+        .controller('accounts_list_create_Ctrl', ['accountSvc', '$state', '$scope', function (accountSvc, $state, $scope) {
+            
             var self = this;
 
             this.name = "";
@@ -12,7 +12,8 @@
 
             this.createAccount = function (name, balance) {
                 accountSvc.createAccount(name, balance).then(function (data) {
-                    self.display = data;
+                    $scope.$root.$broadcast('transaction-updated');
+                    $state.go('accounts.list.details', { id: data }, { reload: true });
                 });
             }
 

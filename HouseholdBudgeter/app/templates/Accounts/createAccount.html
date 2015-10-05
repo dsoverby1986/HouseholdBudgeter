@@ -1,4 +1,55 @@
 ﻿<div class="row">
+    <div class="col-md-11">
+        <h1 class="page-header">
+            Create A New Account <small>For The {{accountsList.household.Name}} Household</small>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="accountName" style="width:150px;">Account Name</label>
+                                <input placeholder="Account Name" style="width:450px; display:inline-block;" ng-model="createAccount.name" type="text" name="accountName" id="accountName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="accountBalance" style="width:150px;">Account Balance</label>
+                                <input placeholder="Account Balance" style="width:450px; display:inline-block;" ng-model="createAccount.balance" type="text" name="accountBalance" id="accountBalance" class="form-control" />
+                            </div>
+                        </div>
+                        <br />
+                        <div style="margin-left:30px;">
+                            <a ui-sref="accounts.list">Back To Accounts</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0%;">
+                        <div class="row" style="padding-left:0%;">
+                            <div style="padding-left:0%;">
+                                <button type="submit" style="height:80px; width:30px; margin-left:-50px; padding-bottom:50px;"
+                                        ng-click="createAccount.createAccount(createAccount.name, createAccount.balance)"
+                                        name="createAccountBtn" class="btn btn-primary">
+                                    <span style="margin-top:-15px;"><span style="margin-left:-2px; display:block; font-size:xx-small">C</span><span style="margin-left:-2px; display:block; font-size:xx-small">R</span><span style="margin-left:-2px; display:block; font-size:xx-small">E</span><span style="margin-left:-2px; display:block; font-size:xx-small;">A</span><span style="margin-left:-2px; display:block; font-size:xx-small;">T</span><span style="margin-left:-2px; display:block; font-size:xx-small;">E</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!--
+
+<div class="row">
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
@@ -12,23 +63,26 @@
         <div class="row">
             <div class="col-lg-12">
                 <div>
-                    <input type="text" placeholder="Account Name" ng-model="createAccount.name" id="name" />
+                    <span> </span><input type="text" placeholder="Account Name" ng-model="createAccount.name" id="name" />
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div>
-                    <input type="text" placeholder="Account Balance" ng-model="createAccount.balance" id="balance" />
+                    <span>$</span><input type="text" placeholder="Account Balance" ng-model="createAccount.balance" id="balance" />
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div>
-                    <button type="submit" ng-click="createAccount.createAccount(createAccount.name, createAccount.balance); accounts.clearFields();" id="createAccount">Create Account</button>
+                    <button type="submit" ng-click="createAccount.createAccount(createAccount.name, createAccount.balance)" id="createAccount">Create Account</button>
                 </div>
             </div>
+        </div>
+        <div>
+            <a ui-sref="accounts.list">Back To Accounts</a>
         </div>
     </div>
-</div>
+</div>-->

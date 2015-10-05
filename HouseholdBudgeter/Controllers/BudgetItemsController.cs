@@ -57,16 +57,16 @@ namespace HouseholdBudgeter.Models
 
             db.Entry(budgetItem).State = EntityState.Modified;
 
-            if (budgetItem.Category != null && budgetItem.Category.Id != 0)
+            if (budgetItem.Category != null)
             {
-                db.Entry(budgetItem.Category).State = EntityState.Unchanged;
+                db.Entry(budgetItem.Category).State = budgetItem.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
             var user = db.Users.Find(User.Identity.GetUserId());
             var itemIshad = user.Household.BudgetItems.Any(i => i.Id == budgetItem.Id);
 
             if (!itemIshad)
-                return Ok("You do not have permission to alter this budget item.");
+                return BadRequest();
 
             try
             {
@@ -98,15 +98,17 @@ namespace HouseholdBudgeter.Models
                 return BadRequest(ModelState);
             }
 
-            if (budgetItem.Category != null && budgetItem.Category.Id != 0)
+            if (budgetItem.Category != null)
             {
-                db.Entry(budgetItem.Category).State = EntityState.Unchanged;
+                db.Entry(budgetItem.Category).State = budgetItem.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
             var user = db.Users.Find(User.Identity.GetUserId());
 
+            budgetItem.Category.HouseholdId = user.HouseholdId;
+
             budgetItem.HouseHoldId = (int)user.HouseholdId;
-            //budgetItem.Household = user.Household;
+            
             if (budgetItem.Category.Id != 0)
             {
                 budgetItem.CategoryId = budgetItem.Category.Id;

@@ -5,7 +5,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace HouseholdBudgeter.Models

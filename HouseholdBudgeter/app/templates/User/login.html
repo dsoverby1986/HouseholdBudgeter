@@ -1,6 +1,56 @@
-﻿<br />
-<br />
-<br />
+﻿<div class="row">
+    <div class="col-md-11">
+        <h1 class="page-header">
+            User Log In
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="loginEmail" style="width:150px;">Email</label>
+                                <input type="text" placeholder="Email" style="width:450px; display: inline-block" ng-model="login.username" name="email" id="loginEmail" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label for="loginPassword" style="width:150px;">Password</label>
+                                <input type="password" placeholder="Password" style="width:450px; display: inline-block" ng-model="login.password" name="passsword" id="loginPassword" class="form-control" required />
+                            </div>
+                        </div>
+                        <br />
+                        <div style="margin-left:30px;">
+                            <a ui-sref="register">New User Registration</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0%;">
+                        <div class="row" style="padding-left:0%;">
+                            <div style="padding-left:0%;">
+                                <button type="submit" style="height:78px; width:30px; margin-left:-50px;"
+                                        ng-click="login.submit()"
+                                        name="registerBtn" class="btn btn-primary">
+                                    <!--<span style="margin-left:-3px;">L</span><br /><span style="margin-left:-3px;">O</span><br /><span style="margin-left:-4px;">G</span><br /><span style="margin-left:-2px;">I</span><br /><span style="margin-left:-3px;">N</span><br />-->
+                                    <span style="margin-top:-15px;"><span style="margin-left:-2px; display:block; font-size:xx-small">L</span><span style="margin-left:-2px; display:block; font-size:xx-small">O</span><span style="margin-left:-2px; display:block; font-size:xx-small">G</span><span style="margin-left:-2px; display:block; font-size:xx-small;">I</span><span style="margin-left:-2px; display:block; font-size:xx-small;">N</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!--
 <input ng-model="login.username" placeholder="Username.." /><br />
 <input ng-model="login.password" placeholder="Password.." /><br />
 <button ng-click="login.submit()">Login</button>
+<a ui-sref="register">New User Registration</a>-->

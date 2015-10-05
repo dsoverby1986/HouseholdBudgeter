@@ -1,6 +1,6 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('household_join_Ctrl', ['household', '$state', function (household, $state) {
+        .controller('household_join_Ctrl', ['householdSvc', '$state', function (householdSvc, $state) {
 
             var self = this;
 
@@ -10,13 +10,15 @@
 
             this.code = "";
 
-            this.createHousehold = function (name) {
-                householdSvc.createHousehold(name).then(function (data) {
+            this.createHousehold = function () {
+                debugger;
+                householdSvc.createHousehold(self.name).then(function (data) {
                     $state.go('household.details');
                 });
             }
 
             this.joinHouse = function (email, code) {
+                debugger;
                 householdSvc.joinHousehold(email, code).then(function (data) {
                     $state.go('household.details');
                 });

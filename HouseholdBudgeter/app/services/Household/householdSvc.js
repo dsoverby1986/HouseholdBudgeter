@@ -10,13 +10,15 @@
         }
 
         f.createHousehold = function (name) {
-            return $http.post('/api/account/createhousehold', name).then(function (response) {
+            debugger;
+            return $http.post('/api/Account/CreateHousehold', { Name: name }).then(function (response) {
                 return response.data;
             });
         }
 
         f.joinHousehold = function (inviteEmail, code) {
-            return $http.post('/api/account/joinhousehold', inviteEmail, code).then(function (response) {
+            debugger;
+            return $http.post('/api/account/joinhousehold', { InvitedEmail: inviteEmail, Code: code }).then(function (response) {
                 return response.data;
             });
         }

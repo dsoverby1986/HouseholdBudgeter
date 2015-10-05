@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using HouseholdBudgeter.Models;
+using Microsoft.AspNet.Identity;
 
 namespace HouseholdBudgeter.Controllers
 {
@@ -21,9 +22,20 @@ namespace HouseholdBudgeter.Controllers
         // GET: api/Categories
         [Authorize]
         [HttpPost, Route("GetCategories")]
-        public IQueryable<Category> GetCategories()
+        public IHttpActionResult GetCategories()
         {
-            return db.Categories;
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            try
+            {
+                var cats = user.Household.Categories.Where(c => c.Name != "Manual Balance Adjustment" && c.Name != "Initial Account Balance");
+                return Ok(cats);
+            }
+
+            catch (NullReferenceException)
+            {
+                return BadRequest("No Categories found.");
+            }
         }
 
         // GET: api/Categories/5

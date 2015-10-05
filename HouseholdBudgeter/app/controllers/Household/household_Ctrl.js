@@ -3,25 +3,31 @@
         .controller('household_Ctrl', ['householdSvc', '$state', 'confirmModalSvc', function (householdSvc, $state, confirmModalSvc) {
 
             var self = this;
+            this.$state = $state;
 
             this.leaveHousehold = function () {
-                console.log('Leaving household')
                 return confirmModalSvc.open("Are you sure you want to leave this household? You will no longer have access to any accounts!", function () {
-                    return householdSvc.leaveHousehold()},
-                    function(){
-                        $state.go('household.join')
-                    });
+                    return householdSvc.leaveHousehold();
+                },
+                    function () {
+                        $state.go('household.join');
+                    }, "md", function () {
+                        $state.go('household.details', null, { reload: true });
+                    }
+                );
             }
 
             this.sendInvite = function (inviteEmail) {
-                console.log(inviteEmail)
                 return confirmModalSvc.open("Do you want to invite this user?", function () {
-                    return householdSvc.sendInvite(inviteEmail).then(function (data) {
-                        console.log('invite sent');
-                    });
-                })
+                    return householdSvc.sendInvite(inviteEmail)
+                }, function () {
+                    $state.go('household.details', null, { reload: true })
+                    }, "md", function () {
+                    $state.go('household.details', null, { reload: true })
+                    }
+                );
             }
-        }])
+        }]);
 })();
 /*    angular.module('HouseholdBudgeter')
         .controller('accountCtrl', ['accountSvc', '$state', function (accountSvc, $state) {

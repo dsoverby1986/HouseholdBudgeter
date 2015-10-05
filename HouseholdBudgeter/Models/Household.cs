@@ -13,6 +13,7 @@ namespace HouseholdBudgeter.Models
             this.Users = new HashSet<ApplicationUser>();
             this.Accounts = new HashSet<Account>();
             this.BudgetItems = new HashSet<BudgetItem>();
+            this.Categories = new HashSet<Category>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,7 @@ namespace HouseholdBudgeter.Models
         public virtual ICollection<ApplicationUser> Users { get; set; }
         [JsonIgnore]
         public virtual ICollection<BudgetItem> BudgetItems { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

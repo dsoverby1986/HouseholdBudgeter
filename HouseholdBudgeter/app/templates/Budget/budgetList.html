@@ -1,4 +1,55 @@
-﻿<div class="row">
+﻿<div ui-view>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">
+                Budget Items List <small>For The {{budgetList.household.Name}} Household</small>
+            </h1>
+        </div>
+    </div>
+    <!-- /. ROW  -->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Advanced Tables -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Budget Items
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table tr-ng-grid="" items="budgetList.display" page-items="10" class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th field-name="Name" enable-sorting="true" display-name="Item Name" display-align="center" enable-filtering="false"></th>
+                                    <th field-name="Amount" enable-sorting="true" display-name="Amount" display-align="center" enable-filtering="false" display-format="currency"></th>
+                                    <th field-name="Frequency" enable-sorting="true" display-name="Annual Frequency" display-align="center" enable-filtering="false"></th>
+                                    <th field-name="Category.Name" enable-sorting="true" display-name="Category" display-align="center" enable-filtering="false"></th>
+                                    <th enable-sorting="false" display-name="Actions" display-align="center" enable-filtering="false"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!--ui-sref="budget.list.editItem({ id: item.Id })"-->
+                                        <a ui-sref="budget.list.editItem({ id: gridItem.Id })"><i class="fa fa-pencil-square fa-lg" tooltip="Edit"></i></a> <span> | </span>
+                                        <a ng-click="budget.deleteBudgetItem(gridItem.Id)" style="cursor:pointer"><i class="fa fa-trash-o fa-lg" tooltip="Delete"></i></a>
+                                       <!-- <div class="btn-group">
+                                            <label type=" button" class="btn btn-primary btn-sm" ng-click="accountDetails.beginEdit(gridItem.id)"><i class="fa fa-edit m-r-5"></i></label>
+                                            <label type="button" class="btn btn-danger btn-sm" ng-click="accountDetails.beginDelete(gridItem.id)"><i class="fa fa-trash m-r-5"></i></label>
+                                        </div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a ui-sref="budget.list.createItem">Create New Budget Item</a>
+                </div>
+            </div>
+            <!--End Advanced Tables -->
+        </div>
+    </div>
+</div>  
+<!--
+<div class="row">
     <div class="col-lg-6">
         <div class="row">
             <div class="col-lg-12">
@@ -55,4 +106,4 @@
         </div>
     </div>
     <div class="col-lg-6" ui-view></div>
-</div>
+</div>-->

@@ -22,8 +22,6 @@
             }
 
             f.createBudgetItem = function (thing) {
-                console.log("inside budgetItemSvc");
-                console.log(thing);
                 return $http.post('/api/budgetitems/createbudgetitem', thing).then(function (response) {
                     return response.data;
                 });

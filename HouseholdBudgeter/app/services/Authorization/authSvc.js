@@ -7,13 +7,12 @@ angular.module('HouseholdBudgeter')
 
     var _authentication = {
         isAuth: false,
-        userName: ""
+        userName: "",
+        householdId: ""
     };
 
     var _saveRegistration = function (registration) {
-
         _logout();
-
         return $http.post(serviceBase + 'api/account/register', registration).then(function (response) {
             return response;
         });
@@ -21,7 +20,7 @@ angular.module('HouseholdBudgeter')
     };
 
     var _login = function (username, password) {
-
+        debugger;
         var data = "grant_type=password&username=" + username + "&password=" + password;
 
         var deferred = $q.defer();
@@ -32,6 +31,7 @@ angular.module('HouseholdBudgeter')
 
             _authentication.isAuth = true;
             _authentication.username = username;
+            _authentication.householdId = response.householdId;
 
             deferred.resolve(response);
 
@@ -50,6 +50,7 @@ angular.module('HouseholdBudgeter')
 
         _authentication.isAuth = false;
         _authentication.username = "";
+        _authentication.householdId = "";
 
     };
 
@@ -59,6 +60,7 @@ angular.module('HouseholdBudgeter')
         if (authData) {
             _authentication.isAuth = true;
             _authentication.username = authData.username;
+            _authentication.householdId = authData.householdId;
         }
 
     };
@@ -76,7 +78,7 @@ angular.module('HouseholdBudgeter')
 
             $http.post(serviceBase + 'token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).success(function (response) {
 
-                localStorageService.set('authorizationData', { token: response.access_token, username: response.username, refreshToken: response.refresh_token });
+                localStorageService.set('authorizationData', { token: response.access_token, username: response.username, householdId: response.householdId, refreshToken: response.refresh_token });
 
                 deferred.resolve(response);
 

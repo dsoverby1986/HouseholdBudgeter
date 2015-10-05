@@ -9,6 +9,8 @@
             this.$state = $state;
 
             this.editAccount = function () {
+                debugger;
+                console.log(account);
                 accountSvc.editAccount(account).then(function (data) {
                     $state.go('accounts.list', null, { reload: true });
                 });

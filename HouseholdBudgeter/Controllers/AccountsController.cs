@@ -142,15 +142,12 @@ namespace HouseholdBudgeter.Controllers
             {
                 return BadRequest(ModelState);
             }
-            /*
-            if (account != null)
-            {
-                db.Entry(account).State =  EntityState.Modified;
-            }
-            */
+            
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            var existingAccount = db.Accounts.AsNoTracking().FirstOrDefault(a => a.Id == account.Id);
+            //var existingAccount = db.Accounts.FirstOrDefault(a => a.Id == account.Id);
+
+            var existingAccount = user.Household.Accounts.FirstOrDefault(a => a.Id == account.Id);
 
             if (account == null)
             {
@@ -175,9 +172,19 @@ namespace HouseholdBudgeter.Controllers
                 db.Transactions.Add(trans);
             }
 
+            if (account.Name != existingAccount.Name)
+            {
+                existingAccount.Name = account.Name;
+            }
+            /*
+            if (account != null)
+            {
+                db.Entry(account).State = EntityState.Modified;
+            }
+            */
             await db.SaveChangesAsync();
 
-            return Ok(existingAccount);
+            return Ok(account);
         }
 
         [HttpPost, Route("AdjustBalance")]

@@ -31,8 +31,10 @@
                                 <tr>
                                     <td>
                                         <!--ui-sref="budget.list.editItem({ id: item.Id })"-->
-                                        <a ui-sref="accounts.list.details.editTrans({transId: gridItem.Id})"><i class="fa fa-pencil-square fa-lg" tooltip="Edit" ng-hide="gridItem.Description == 'Account Initialization'"></i></a> <span ng-hide="gridItem.Description == 'Account Initialization' || gridItem.Description == 'Manual Account Balance Adjustment'"> | </span>
-                                        <a ng-click="accountDetails.deleteTrans(gridItem.Id)" style="cursor:pointer"><i class="fa fa-trash-o fa-lg" tooltip="Delete" ng-hide="gridItem.Description == 'Account Initialization' || gridItem.Description == 'Manual Account Balance Adjustment'"></i></a>
+                                        <div ng-hide="gridItem.Description == 'Account Initialization' || gridItem.Description == 'Manual Account Balance Adjustment'">
+                                            <a ui-sref="accounts.list.details.editTrans({transId: gridItem.Id})"><i class="fa fa-pencil-square fa-lg" tooltip="Edit"></i></a> <span> | </span>
+                                            <a ng-click="accountDetails.deleteTrans(gridItem.Id)" style="cursor:pointer"><i class="fa fa-trash-o fa-lg" tooltip="Delete"></i></a>
+                                        </div>
                                         <!-- <div class="btn-group">
             <label type=" button" class="btn btn-primary btn-sm" ng-click="accountDetails.beginEdit(gridItem.id)"><i class="fa fa-edit m-r-5"></i></label>
             <label type="button" class="btn btn-danger btn-sm" ng-click="accountDetails.beginDelete(gridItem.id)"><i class="fa fa-trash m-r-5"></i></label>

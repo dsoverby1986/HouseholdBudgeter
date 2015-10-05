@@ -28,6 +28,8 @@
         }
 
         f.editAccount = function (account) {
+            debugger;
+            console.log(account);
             return $http.post('/api/accounts/editaccount', account).then(function (response) {
                 return response.data;
             });

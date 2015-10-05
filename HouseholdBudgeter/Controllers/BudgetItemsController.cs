@@ -55,34 +55,34 @@ namespace HouseholdBudgeter.Models
                 return BadRequest(ModelState);
             }
 
-            db.Entry(budgetItem).State = EntityState.Modified;
-
             if (budgetItem.Category != null)
             {
                 db.Entry(budgetItem.Category).State = budgetItem.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
-            var user = db.Users.Find(User.Identity.GetUserId());
-            var itemIshad = user.Household.BudgetItems.Any(i => i.Id == budgetItem.Id);
+            var existingItem = db.BudgetItems.FirstOrDefault(i => i.Id == budgetItem.Id);
 
-            if (!itemIshad)
-                return BadRequest();
+            if (budgetItem.Name != existingItem.Name)
+            {
+                existingItem.Name = budgetItem.Name;
+            }
 
-            try
+            if (budgetItem.Amount != existingItem.Amount)
             {
-                await db.SaveChangesAsync();
+                existingItem.Amount = budgetItem.Amount;
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (budgetItem.CategoryId != existingItem.CategoryId)
             {
-                if (!BudgetItemExists(budgetItem.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                existingItem.CategoryId = budgetItem.CategoryId;
             }
+
+            if (budgetItem.Frequency != existingItem.Frequency)
+            {
+                existingItem.Frequency = budgetItem.Frequency;
+            }
+
+            await db.SaveChangesAsync();
 
             return Ok(budgetItem);
         }

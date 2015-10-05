@@ -168,8 +168,6 @@ namespace HouseholdBudgeter.Controllers
                 db.Entry(trans.Category).State = trans.Category.Id == 0 ? EntityState.Added : EntityState.Unchanged;
             }
 
-            var user = db.Users.Find(User.Identity.GetUserId());
-
             if (!trans.IsIncome)
             {
                 if (trans.Amount > 0)
@@ -180,7 +178,7 @@ namespace HouseholdBudgeter.Controllers
                     trans.Amount *= -1;
 
             trans.Created = DateTimeOffset.Now;
-            var account = user.Household.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
+            var account = db.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
             account.Balance = account.Balance + trans.Amount;
 
             if (trans.Category.Id != 0)

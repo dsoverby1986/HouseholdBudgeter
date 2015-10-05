@@ -24,6 +24,7 @@
 
                 this.editTrans = function () {
                     trans.CategoryId = trans.Category.Id;
+                    debugger;
                     transactionSvc.editTransaction(trans).then(function () {
                         $scope.$root.$broadcast('transaction-updated');
                         $state.go('accounts.list.details', null, { reload: true });

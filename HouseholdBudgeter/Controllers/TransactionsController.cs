@@ -217,6 +217,30 @@ namespace HouseholdBudgeter.Controllers
             //return Ok(transaction);
         }
 
+        [Authorize]
+        [HttpPost, Route("RecentTransactions")]
+        [ResponseType(typeof(Transaction))]
+        public async Task<IHttpActionResult> GetRecentTransactions()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            string[] arr = { "Edited Balance", "Account Created" };
+            var trans = await db.Transactions.Where(t => t.Account.HouseholdId == user.HouseholdId && !t.Archived && !arr.Contains(t.Category.Name)).OrderByDescending(t => t.Created).Take(5).ToListAsync();
+            var transactions = new List<object>();
+            foreach (var item in trans)
+            {
+                transactions.Add(new
+                {
+                    Created = item.Created,
+                    AccountName = item.Account.Name,
+                    Amount = item.Amount,
+                    Desc = item.Description,
+                    AccountId = item.AccountId
+                });
+            }
+
+            return Ok(transactions);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

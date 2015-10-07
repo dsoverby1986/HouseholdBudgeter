@@ -41,6 +41,12 @@
             });
         }
 
+        f.getUser = function () {
+            return $http.post('/api/account/getuser').then(function (response) {
+                return response.data;
+            })
+        }
+
         return f;
 
     }])

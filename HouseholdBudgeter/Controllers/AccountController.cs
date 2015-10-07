@@ -333,7 +333,7 @@ namespace HouseholdBudgeter.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, DisplayName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email, DisplayName = model.Email, Email = model.Email, Created = DateTimeOffset.Now };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -484,6 +484,8 @@ namespace HouseholdBudgeter.Controllers
 
             user.HouseholdId = household.Id;
 
+            user.JoinedHousehold = DateTimeOffset.Now;
+
             db.SaveChanges();
 
             return Ok(household);
@@ -519,10 +521,14 @@ namespace HouseholdBudgeter.Controllers
                 if(user != null)
                 {
                     user.HouseholdId = invite.HouseholdId;
+
+                    user.JoinedHousehold = DateTimeOffset.Now;
                 }
                 else
                 {
                     outuser.HouseholdId = invite.HouseholdId;
+
+                    user.JoinedHousehold = DateTimeOffset.Now;
                 }
                 
                 db.Invitation.Remove(invite);
@@ -550,6 +556,8 @@ namespace HouseholdBudgeter.Controllers
             var household = user.Household.Name;
 
             user.HouseholdId = null;
+
+            user.JoinedHousehold = null;
 
             await db.SaveChangesAsync();
 
@@ -627,6 +635,16 @@ namespace HouseholdBudgeter.Controllers
 
             return Ok(invite);
 
+        }
+
+        [Authorize]
+        [HttpPost, Route("GetUser")]
+        [ResponseType(typeof(ApplicationUser))]
+        public IHttpActionResult GetUser()
+        {
+            ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+
+            return Ok(user);
         }
 
         private bool HouseholdExists(int id)

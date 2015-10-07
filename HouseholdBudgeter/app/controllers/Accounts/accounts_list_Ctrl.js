@@ -1,8 +1,12 @@
 ﻿(function () {
     angular.module('HouseholdBudgeter')
-        .controller('accounts_list_Ctrl', ['householdSvc', 'categorySvc', 'accountSvc', '$state', '$scope', function (householdSvc, categorySvc, accountSvc, $state, $scope) {
+        .controller('accounts_list_Ctrl', ['household', 'accounts', 'householdSvc', 'categorySvc', 'accountSvc', '$state', '$scope', function (household, accounts, householdSvc, categorySvc, accountSvc, $state, $scope) {
 
             var self = this;
+
+            this.accounts = accounts;
+
+            this.household = household;
 
             var refresh = function () {
                 accountSvc.getAccounts().then(function (accts) {

@@ -39,6 +39,14 @@
                 });
             }
 
+            f.recentTransactions = function () {
+                return $http.post('/api/transactions/recenttransactions').then(function (response) {
+                    {
+                        return response.data;
+                    }
+                })
+            }
+
             return f;
 
         }])

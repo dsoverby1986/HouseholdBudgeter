@@ -46,14 +46,23 @@
                             </div>
                         </div>
                         <!--typeahead-on-select="editItemCtrl.model.Category = $item"-->
+                        <div class="col-lg-12">
+                            <label style="width:100px; display:inline-block; margin-left:-12px;">Type</label>
+                            <label class="radio-inline">
+                                <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="true" required>Income
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="false" checked="checked" required>Expenditure
+                            </label>
+                        </div>
                         <div class="row" style="padding-bottom:10px;">
                             <!--<div class="col-lg-1">
-                                <label for="editTransType" class="">Type</label>
+                                <label for="editItemType" class="">Type</label>
                             </div>
                             <div class="col-lg-3">
-                                <div class="btn-group" id="editTransType">
-                                    <label class="btn btn-success" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'True'">Income</label>
-                                    <label class="btn btn-danger" ng-model="editTransCtrl.trans.IsIncome" btn-radio="'False'">Expense</label>
+                                <div class="btn-group" id="editItemType">
+                                    <label class="btn btn-success" ng-model="editItem.budgetItem.IsIncome" btn-radio="'True'">Income</label>
+                                    <label class="btn btn-danger" ng-model="editItem.budgetItem.IsIncome" btn-radio="'False'">Expenditure</label>
                                 </div>
                             </div>-->
                             <br />

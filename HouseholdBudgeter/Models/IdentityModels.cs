@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Linq;
+using System;
 
 namespace HouseholdBudgeter.Models
 {
@@ -16,6 +17,8 @@ namespace HouseholdBudgeter.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public int? HouseholdId { get; set; }
+        public Nullable<DateTimeOffset> Created { get; set; }
+        public Nullable<DateTimeOffset> JoinedHousehold { get; set; }
 
         public virtual Household Household { get; set; }
         

@@ -207,7 +207,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\ChartingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
@@ -269,9 +269,11 @@
     <Content Include="app\controllers\Household\household_join_Ctrl.js" />
     <Content Include="app\controllers\Household\household_details_Ctrl.js" />
     <Content Include="app\controllers\Household\household_Ctrl.js" />
+    <Content Include="app\controllers\User\change_password_Ctrl.js" />
     <Content Include="app\controllers\User\login_Ctrl.js" />
     <Content Include="app\controllers\Categories\newCategoryCtrl.js" />
     <Content Include="app\controllers\User\navCtrl.js" />
+    <Content Include="app\controllers\User\profile_Ctrl.js" />
     <Content Include="app\controllers\User\register_Ctrl.js" />
     <Content Include="app\services\Accounts\accountSvc.js" />
     <Content Include="app\services\Authorization\authIntercepterSvc.js" />
@@ -300,7 +302,9 @@
     <Content Include="app\templates\home.html" />
     <Content Include="app\templates\Household\household.html" />
     <Content Include="app\templates\Household\householddetails.html" />
+    <Content Include="app\templates\User\changePassword.html" />
     <Content Include="app\templates\User\login.html" />
+    <Content Include="app\templates\User\profile.html" />
     <Content Include="app\templates\User\Register.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />

@@ -15,12 +15,26 @@
               templateUrl: "/app/templates/user/login.html",
               controller: "login_Ctrl as login"
           })
-            .state('register', {
-                url: "/register",
-                templateUrl: "/app/templates/user/register.html",
-                controller: "register_Ctrl as register"
-            })
-
+          .state('register', {
+              url: "/register",
+              templateUrl: "/app/templates/user/register.html",
+              controller: "register_Ctrl as register"
+          })
+          .state('profile', {
+              url: "/profile",
+              templateUrl: "/app/templates/user/profile.html",
+              controller: "profile_Ctrl as profile",
+              resolve: {
+                  user: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getUser();
+                  }]
+              }
+          })
+          .state('profile.changepassword', {
+              url: "/newpassword",
+              templateUrl: "/app/templates/user/changePassword.html",
+              controller: "change_password_Ctrl as changePassword"
+          })
           .state('home', {
               url: "/home",
               templateUrl: "/app/templates/home.html",
@@ -51,7 +65,12 @@
               url: "/dashboard",
               templateUrl: "/app/templates/dashboard/dashboard.html",
               //controller: "dashboard_Ctrl as dashboard"
-              controller: "dashboard_details_Ctrl as dashboardDetails"
+              controller: "dashboard_details_Ctrl as dashboardDetails",
+              resolve: {
+                  household: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getHousehold();
+                  }]
+              }
           })
           .state('accounts', {
               url: "/accounts",
@@ -62,7 +81,15 @@
           .state('accounts.list', {
               url: "",
               templateUrl: "/app/templates/accounts/accountsList.html",
-              controller: "accounts_list_Ctrl as accountsList"
+              controller: "accounts_list_Ctrl as accountsList",
+              resolve: {
+                  household: ['householdSvc', function(householdSvc){
+                      return householdSvc.getHousehold();
+                  }],
+                  accounts: ['accountSvc', function (accountSvc) {
+                      return accountSvc.getAccounts();
+                  }]
+              }
           })
           .state('accounts.list.create', {
               url: "/create",

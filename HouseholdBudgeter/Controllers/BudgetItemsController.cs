@@ -28,6 +28,18 @@ namespace HouseholdBudgeter.Models
 
             var budgetItems = user.Household.BudgetItems;
 
+            foreach (var item in budgetItems)
+            {
+                if (item.IsIncome)
+                {
+                    item.Type = "Income";
+                }
+                else
+                {
+                    item.Type = "Expenditure";
+                }
+            }
+
             return Ok(budgetItems);
         }
 
@@ -82,6 +94,20 @@ namespace HouseholdBudgeter.Models
                 existingItem.Frequency = budgetItem.Frequency;
             }
 
+            if (budgetItem.IsIncome != existingItem.IsIncome)
+            {
+                existingItem.IsIncome = budgetItem.IsIncome;
+            }
+
+            if (budgetItem.IsIncome)
+            {
+                existingItem.Type = "Income";
+            }
+            else
+            {
+                existingItem.Type = "Expenditure";
+            }
+
             await db.SaveChangesAsync();
 
             return Ok(budgetItem);
@@ -112,6 +138,15 @@ namespace HouseholdBudgeter.Models
             if (budgetItem.Category.Id != 0)
             {
                 budgetItem.CategoryId = budgetItem.Category.Id;
+            }
+
+            if (budgetItem.IsIncome)
+            {
+                budgetItem.Type = "Income";
+            }
+            else
+            {
+                budgetItem.Type = "Expenditure";
             }
 
             db.BudgetItems.Add(budgetItem);

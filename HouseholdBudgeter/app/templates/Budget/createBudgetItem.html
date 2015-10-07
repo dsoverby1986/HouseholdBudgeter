@@ -47,6 +47,15 @@
                         </div>
                         <!--typeahead-on-select="createItemCtrl.model.Category = $item"-->
                         <div class="row" style="padding-bottom:10px;">
+                            <div class="col-lg-12">
+                                <label style="width:100px; display:inline-block;">Type</label>
+                                <label class="radio-inline">
+                                    <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="true" required>Income
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="false" checked="checked" required>Expenditure
+                                </label>
+                            </div>
                             <!--<div class="col-lg-1">
                                 <label for="editTransType" class="">Type</label>
                             </div>

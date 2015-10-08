@@ -47,7 +47,8 @@
                 <div class="panel-body">
                     <p>Invite another user to join your household.</p>
                     <br />
-                    <input type="email" ng-model="houseDetails.inviteEmail">
+                    <input type="email" ng-model="houseDetails.inviteEmail" placeholder="Invitee Email Address" style="width:100%;" class="form-control">
+                    <br />
                     <button class="btn btn-success" type="button" ng-click="house.sendInvite(houseDetails.inviteEmail)">Send</button>
                     <p></p>
                 </div>

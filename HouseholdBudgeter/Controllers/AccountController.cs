@@ -383,6 +383,28 @@ namespace HouseholdBudgeter.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpPost, Route("ObliterateUserAccount")]
+        public IHttpActionResult ObliterateUserAccount(ApplicationUser userIn)
+        {
+            //var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            ApplicationUser user = (from u in db.Users
+                                    where u.Id == userIn.Id
+                                    select u).First();
+
+            db.Users.Remove(user);
+
+            db.SaveChanges();
+
+            return Ok();
+        }
+
         // GET: api/Households
         [Route("HouseHolds")]
         public IQueryable<Household> GetHouseholds()

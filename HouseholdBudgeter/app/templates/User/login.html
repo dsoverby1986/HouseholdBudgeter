@@ -20,8 +20,13 @@
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="loginPassword" style="width:150px;">Password</label>
-                                <input type="password" placeholder="Password" style="width:450px; display: inline-block" ng-model="login.password" name="passsword" id="loginPassword" class="form-control" required />
+                                <input type="password" placeholder="Password" style="width:450px; display: inline-block" ng-model="login.password" name="password" id="loginPassword" class="form-control" required />
                             </div>
+                        </div>
+                        <div ng-if="login.error != null">
+                            <h5 style="color:red; margin-left:24%;">
+                                {{login.error}}
+                            </h5>
                         </div>
                         <br />
                         <div style="margin-left:30px;">

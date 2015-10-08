@@ -5,7 +5,7 @@ angular.module('HouseholdBudgeter').controller('login_Ctrl', ['authSvc', '$state
     self.username = '';
     self.password = '';
 
-    self.errors = null;
+    self.error = null;
 
     self.submit = function () {
         authSvc.login(self.username, self.password).then(function (success) {
@@ -13,7 +13,8 @@ angular.module('HouseholdBudgeter').controller('login_Ctrl', ['authSvc', '$state
                 $state.go('household.join');
             $state.go('dashboard');
         }, function (error) {
-            self.errors = errors.error_description;
+            console.log(error);
+            self.error = error.error_description;
         });
     }
 }])

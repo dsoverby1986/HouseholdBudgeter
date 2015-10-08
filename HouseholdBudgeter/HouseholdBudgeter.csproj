@@ -283,6 +283,7 @@
     <Content Include="app\services\Modals\confirmModalSvc.js" />
     <Content Include="app\services\Household\householdSvc.js" />
     <Content Include="app\services\Transactions\transactionSvc.js" />
+    <Content Include="app\services\User\profileSvc.js" />
     <Content Include="app\templates\Accounts\accountDetails.html" />
     <Content Include="app\templates\Accounts\accountEdit.html" />
     <Content Include="app\templates\Accounts\accounts.html" />

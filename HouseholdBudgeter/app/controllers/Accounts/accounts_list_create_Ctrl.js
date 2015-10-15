@@ -10,10 +10,21 @@
 
             this.display = {};
 
+            this.error = "";
+
             this.createAccount = function (name, balance) {
                 accountSvc.createAccount(name, balance).then(function (data) {
-                    $scope.$root.$broadcast('transaction-updated');
-                    $state.go('accounts.list.details', { id: data }, { reload: true });
+                    console.log(data);
+                    if (data == "nameError") {
+                        self.error = "nameError";
+                    }
+                    else if (data == "balanceError") {
+                        self.error = "balanceError";
+                    }
+                    else {
+                        $scope.$root.$broadcast('transaction-updated');
+                        $state.go('accounts.list.details', { id: data }, { reload: true });
+                    }
                 });
             }
 

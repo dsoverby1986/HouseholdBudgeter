@@ -8,11 +8,19 @@
 
             this.$state = $state;
 
+            this.error = "";
+
             this.editAccount = function () {
-                debugger;
-                console.log(account);
                 accountSvc.editAccount(account).then(function (data) {
-                    $state.go('accounts.list', null, { reload: true });
+                    if (data == "nameError") {
+                        self.error = "nameError";
+                    }
+                    else if (data == "balanceError") {
+                        self.error = "balanceError";
+                    }
+                    else {
+                        $state.go('accounts.list', null, { reload: true });
+                    }
                 });
             }
 

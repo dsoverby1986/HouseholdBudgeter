@@ -620,6 +620,12 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Invitaton))]
         public async Task<IHttpActionResult> PostInvite(WebApiSucksSoMuch inviteEmail)
         {
+            if (inviteEmail.Email == "")
+            {
+                string error = "noEmail";
+                return Ok(error);
+            }
+
             var user = db.Users.Find(User.Identity.GetUserId());
 
             InviteCode code = new InviteCode();

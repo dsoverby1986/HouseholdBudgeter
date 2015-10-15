@@ -11,13 +11,14 @@
             this.categories = categories;
 
             this.model = {
-                name: "",
-                amount: "",
-                frequency: "",
+                Name: "",
+                Amount: "",
+                Frequency: "",
                 Category: {
                     Id: 0,
                     Name: ""
-                }
+                },
+                IsIncome: false
             };
 
             this.getCategories = function () {
@@ -26,15 +27,34 @@
                 })
             }
 
-            this.createItem = function (item) {
+            this.error = "";
 
-                if (typeof(item.Category) == "string") 
-                    item.Category = { Id: 0, Name: item.Category };
+            this.createItem = function (model) {
 
-                item.CategoryId = item.Category.Id;
+                if (typeof(model.Category) == "string") 
+                    model.Category = { Id: 0, Name: model.Category };
 
-                budgetItemSvc.createBudgetItem(item).then(function (data) {
-                    $state.go('budget.list', null, { reload: true })
+                if (model.Category == undefined)
+                    model.Category = { Id: 0, Name: "" };
+
+                model.CategoryId = model.Category.Id;
+                budgetItemSvc.createBudgetItem(model).then(function (data) {
+                    switch (data) {
+                        case "itemNameError":
+                            self.error = "itemNameError";
+                            break;
+                        case "limitAmountError":
+                            self.error = "limitAmountError";
+                            break;
+                        case "frequencyError":
+                            self.error = "frequencyError";
+                            break;
+                        case "categoryError":
+                            self.error = "categoryError";
+                            break;
+                        default:
+                            $state.go('budget.list', null, { reload: true });
+                    }
                 })
             }
 

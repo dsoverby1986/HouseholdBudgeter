@@ -24,6 +24,10 @@
                             </div>
                         </div>
                         <br />
+                        <div id="errors">
+                            <div ng-show="accountEdit.error == 'nameError'" style="color:red;"><div>Please specify the account name.</div><br /></div>
+                            <div ng-show="accountEdit.error == 'balanceError'" style="color:red;"><div>You have either specified that the account balance is $0.00 or you have failed to specify a balance at all. The initial account balance cannot be $0.00 and it cannot be left unspecified. To successfully create this account, please specify a balance other than $0.00.</div><br /></div>
+                        </div>
                         <div style="margin-left:30px;">
                             <a ui-sref="accounts.list">Back To Accounts</a>
                         </div>

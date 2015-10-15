@@ -20,7 +20,6 @@ angular.module('HouseholdBudgeter')
     };
 
     var _login = function (username, password) {
-        debugger;
         var data = "grant_type=password&username=" + username + "&password=" + password;
 
         var deferred = $q.defer();
@@ -39,7 +38,6 @@ angular.module('HouseholdBudgeter')
             _logout();
             deferred.reject(err);
         });
-
         return deferred.promise;
 
     };

@@ -46,6 +46,11 @@
               templateUrl: "/app/templates/household/household.html",
               controller: "household_Ctrl as house"
           })
+            .state('household.join', {
+              url: "/join",
+              templateUrl: "/app/templates/household/joinHousehold.html",
+              controller: "household_join_Ctrl as houseJoin"
+          })
           .state('household.details', {
               url: "",
               templateUrl: "/app/templates/household/householddetails.html",
@@ -55,11 +60,6 @@
                       return householdSvc.getHousehold();
                   }]
               }
-          })
-          .state('household.join', {
-              url: "/join",
-              templateUrl: "/app/templates/household/joinHousehold.html",
-              controller: "household_join_Ctrl as houseJoin"
           })
           .state('dashboard', {
               url: "/dashboard",

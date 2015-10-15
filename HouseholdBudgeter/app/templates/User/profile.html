@@ -18,7 +18,9 @@
                         <p>Name: {{profile.user.FirstName}} {{profile.user.LastName}}</p>
                         <p>Email: {{profile.user.Email}}</p>
                         <p>You have been a registered user since {{profile.user.Created | date: 'fullDate'}}.</p>
-                        <p>You have been a member of the {{profile.user.Household.Name}} household since {{profile.user.JoinedHousehold | date: 'fullDate'}}.</p>
+                        <p ng-show="profile.user.HouseholdId != null">You have been a member of the {{profile.user.Household.Name}} household since {{profile.user.JoinedHousehold | date: 'fullDate'}}.</p>
+                        <p ng-show="profile.user.HouseholdId == null">Currently, you belong to no household. Gently click this link to <a ui-sref="household.join">join or create a household.</a></p>
+                        
                     </div>
                 </div>
                 <div class="panel-footer">

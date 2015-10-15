@@ -68,17 +68,16 @@ namespace HouseholdBudgeter.Controllers
                     values = from month in monthsToDate
                              select new {
                                  x = month.ToString("MMM"),
-                                 y = db.Transactions.Where(t=>t.Created.Month == month.Month && t.Created.Year == month.Year && t.Account.HouseholdId == user.HouseholdId && !t.IsIncome && !t.Archived)
-                                                        .Select(t=>t.Amount).DefaultIfEmpty().Sum() * -1
+                                 y = db.Transactions.Where(t=>t.Created.Month == month.Month && t.Created.Year == month.Year && t.Account.HouseholdId == user.HouseholdId && !t.IsIncome && !t.Archived).Select(t=>t.Amount).DefaultIfEmpty().Sum() * -1
                     }
                 },
                 new {
                     key = "Earned",
+                    color = "#1F77B4",
                     values = from month in monthsToDate
                              select new {
                                  x = month.ToString("MMM"),
-                                 y = db.Transactions.Where(t=>t.Created.Month == month.Month && t.Created.Year == month.Year  && t.Account.HouseholdId == user.HouseholdId && t.IsIncome
-                                                                                                                    && !t.Archived && t.Category.Name != "Account Created" && t.Category.Name != "Edited Balance")
+                                 y = db.Transactions.Where(t=>t.Created.Month == month.Month && t.Created.Year == month.Year  && t.Account.HouseholdId == user.HouseholdId && t.IsIncome && !t.Archived && t.Category.Name != "Initial Account Balance" && t.Category.Name != "Manual Balance Adjustment")
                                                         .Select(t=>t.Amount).DefaultIfEmpty().Sum()
                     }
                 },

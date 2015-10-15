@@ -22,13 +22,32 @@
                     })
                 }
 
+                this.error = "";
+
                 this.editTrans = function () {
-                    trans.CategoryId = trans.Category.Id;
-                    debugger;
-                    transactionSvc.editTransaction(trans).then(function () {
-                        $scope.$root.$broadcast('transaction-updated');
-                        $state.go('accounts.list.details', null, { reload: true });
-                        })
+                    if (trans.Category == undefined) {
+                        trans.CategoryId = 0;
                     }
+                    else
+                    {
+                        trans.CategoryId = trans.Category.Id;
+                    }
+                    transactionSvc.editTransaction(trans).then(function (data) {
+                        switch (data) {
+                            case "descriptionError":
+                                self.error = "descriptionError";
+                                break;
+                            case "amountError":
+                                self.error = "amountError";
+                                break;
+                            case "categoryError":
+                                self.error = "categoryError";
+                                break;
+                            default:
+                                $scope.$root.$broadcast('transaction-updated');
+                                $state.go('accounts.list.details', null, { reload: true });
+                        }
+                    })
+                }
             }]);
 })();

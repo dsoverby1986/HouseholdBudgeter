@@ -62,6 +62,33 @@ namespace HouseholdBudgeter.Models
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutBudgetItem(BudgetItem budgetItem)
         {
+            string badRequestDescription = "";
+
+            if (budgetItem.Name == "" || budgetItem.Name == null)
+            {
+                badRequestDescription = "itemNameError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Amount == 0 || budgetItem.Amount == null)
+            {
+                badRequestDescription = "limitAmountError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Frequency == 0 || budgetItem.Frequency == null)
+            {
+                badRequestDescription = "frequencyError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Category.Name == "" || budgetItem.Category.Name == null)
+            {
+                badRequestDescription = "categoryError";
+
+                return Ok(badRequestDescription);
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -119,6 +146,33 @@ namespace HouseholdBudgeter.Models
         [ResponseType(typeof(BudgetItem))]
         public async Task<IHttpActionResult> PostBudgetItem(BudgetItem budgetItem)
         {
+            string badRequestDescription = "";
+
+            if (budgetItem.Name == "" || budgetItem.Name == null)
+            {
+                badRequestDescription = "itemNameError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Amount == 0 || budgetItem.Amount == null)
+            {
+                badRequestDescription = "limitAmountError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Frequency == 0 || budgetItem.Frequency == null)
+            {
+                badRequestDescription = "frequencyError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (budgetItem.Category.Name == "" || budgetItem.Category.Name == null)
+            {
+                badRequestDescription = "categoryError";
+
+                return Ok(badRequestDescription);
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

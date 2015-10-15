@@ -50,6 +50,10 @@
                     <input type="email" ng-model="houseDetails.inviteEmail" placeholder="Invitee Email Address" style="width:100%;" class="form-control">
                     <br />
                     <button class="btn btn-success" type="button" ng-click="house.sendInvite(houseDetails.inviteEmail)">Send</button>
+                    <div ng-show="house.error == 'noEmail'">
+                        <br />
+                        <div style="color:red;">Please specify the email address of the person you would like to invite to your household.</div>
+                    </div>
                     <p></p>
                 </div>
             </div>

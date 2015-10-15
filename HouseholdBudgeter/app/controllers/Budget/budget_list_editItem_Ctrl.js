@@ -18,18 +18,33 @@
                     });
                 }
 
-           
+                this.error = "";
 
-
-                //data binding not correct. coming up with inappropriate values when saving edited budget item. figue something out guy
                 this.editBudgetItem = function (budgetItem) {     
                     if (typeof (budgetItem.Category) == "string")
                         budgetItem.Category = { Id: 0, Name: budgetItem.Category };
+                    if (budgetItem.Category == undefined) {
+                        budgetItem.Category = { Id: 0, Name: "" };
+                    }
                     budgetItem.CategoryId = budgetItem.Category.Id;
                     budgetItemSvc.editBudgetItem(budgetItem).then(function (data) {
-                        $state.go('budget.list', null, { reload: true });
+                        switch (data) {
+                            case "itemNameError":
+                                self.error = "itemNameError";
+                                break;
+                            case "limitAmountError":
+                                self.error = "limitAmountError";
+                                break;
+                            case "frequencyError":
+                                self.error = "frequencyError";
+                                break;
+                            case "categoryError":
+                                self.error = "categoryError";
+                                break;
+                            default:
+                                $state.go('budget.list', null, { reload: true });
+                        }
                     })
                 }
-
         }]);
 })();

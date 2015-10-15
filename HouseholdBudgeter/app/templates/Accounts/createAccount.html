@@ -14,16 +14,20 @@
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="accountName" style="width:150px;">Account Name</label>
-                                <input placeholder="Account Name" style="width:450px; display:inline-block;" ng-model="createAccount.name" type="text" name="accountName" id="accountName" class="form-control" />
+                                <input placeholder="Account Name" style="width:450px; display:inline-block;" ng-model="createAccount.name" type="text" name="accountName" id="accountName" class="form-control" required />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="accountBalance" style="width:150px;">Account Balance</label>
-                                <input placeholder="Account Balance" style="width:450px; display:inline-block;" ng-model="createAccount.balance" type="text" name="accountBalance" id="accountBalance" class="form-control" />
+                                <input placeholder="Account Balance" style="width:450px; display:inline-block;" ng-model="createAccount.balance" type="text" name="accountBalance" id="accountBalance" class="form-control" required />
                             </div>
                         </div>
                         <br />
+                        <div id="errors">
+                            <div ng-show="createAccount.error == 'nameError'" style="color:red;"><div>Please specify the account name.</div><br /></div>
+                            <div ng-show="createAccount.error == 'balanceError'" style="color:red;"><div>You have either specified that the account balance is $0.00 or you have failed to specify a balance at all. The initial account balance cannot be $0.00 and it cannot be left unspecified. To successfully create this account, please specify a balance other than $0.00.</div><br /></div>
+                        </div>
                         <div style="margin-left:30px;">
                             <a ui-sref="accounts.list">Back To Accounts</a>
                         </div>

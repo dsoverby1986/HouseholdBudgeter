@@ -14,22 +14,22 @@
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createItemName" style="width:100px;">Item Name</label>
-                                <input placeholder="Item Name" style="width:500px; display:inline-block;" ng-model="createItemCtrl.model.name"
-                                       type="text" name="name" id="createItemName" class="form-control" autofocus />
+                                <input placeholder="Item Name" style="width:500px; display:inline-block;" ng-model="createItemCtrl.model.Name"
+                                       type="text" name="name" id="createItemName" class="form-control" required autofocus />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createItemLimit" style="width:100px;">Limit Amount</label>
-                                <input placeholder="Limit Amount" style="width:500px; display:inline-block;" ng-model="createItemCtrl.model.amount" 
-                                       type="text" name="limit" id="createItemLimit" class="form-control" />
+                                <input placeholder="Limit Amount" style="width:500px; display:inline-block;" ng-model="createItemCtrl.model.Amount" 
+                                       type="text" name="limit" id="createItemLimit" class="form-control" required />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createItemFreq" style="width:100px;">Frequency</label>
-                                <input type="text" placeholder="Annual Frequency" style="width:500px; display: inline-block" ng-model="createItemCtrl.model.frequency"
-                                       name="frequency" id="createItemFreq" class="form-control" />
+                                <input type="text" placeholder="Annual Frequency" style="width:500px; display: inline-block" ng-model="createItemCtrl.model.Frequency"
+                                       name="frequency" id="createItemFreq" class="form-control" required />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
@@ -38,7 +38,7 @@
                                 <input type="text" name="category" placeholder="Category"
                                        ng-model="createItemCtrl.model.Category" style="width:500px; display:inline-block;"
                                        typeahead="category as category.Name for category in createItemCtrl.categories | filter:$viewValue | limitTo:8"
-                                       id="createItemCat" class="form-control">
+                                       id="createItemCat" class="form-control" required>
                                 <!--<input type="text" name="category" placeholder="Category"
                                        ng-model="createItemCtrl.model.Category"
                                        typeahead="category as category.Name for category in createItemCtrl.categories | filter:$viewValue | limitTo:8"
@@ -50,10 +50,10 @@
                             <div class="col-lg-12">
                                 <label style="width:100px; display:inline-block;">Type</label>
                                 <label class="radio-inline">
-                                    <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="true" required>Income
+                                    <input type="radio" ng-model="createItemCtrl.model.IsIncome" ng-value="true" required>Income
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" ng-model="editItem.budgetItem.IsIncome" ng-value="false" checked="checked" required>Expenditure
+                                    <input type="radio" ng-model="createItemCtrl.model.IsIncome" ng-value="false" checked="checked" required>Expenditure
                                 </label>
                             </div>
                             <!--<div class="col-lg-1">
@@ -67,7 +67,12 @@
                             </div>-->
                             <br />
                             <br />
-
+                            <div id="errors" style="margin-left:120px;">
+                                <div ng-show="createItemCtrl.error == 'itemNameError'" style="color:red;"><div>Please provide a name for this budget item.</div><br /></div>
+                                <div ng-show="createItemCtrl.error == 'limitAmountError'" style="color:red;"><div>Please provide a valid limit amount for this budget item. The amount has to be a numeric value but cannot be set to $0.00.</div><br /></div>
+                                <div ng-show="createItemCtrl.error == 'frequencyError'" style="color:red;"><div>Please provide a valid frequency specification. The frequency for budget items must be entered as a numeric value but cannot be set as '0'.</div><br /></div>
+                                <div ng-show="createItemCtrl.error == 'categoryError'" style="color:red;"><div>Please provide a valid category for this budget item. You may specify an existing category or create a new category but you may not leave the category property of budget items unspecified.</div><br /></div>
+                            </div>
                             <div style="margin-left:30px;">
                                 <a ui-sref="budget.list">Back To Budget Item List</a>
                             </div>

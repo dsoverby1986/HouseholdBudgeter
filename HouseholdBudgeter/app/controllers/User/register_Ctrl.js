@@ -29,10 +29,8 @@ angular.module('HouseholdBudgeter').
         self.errors = null;
 
         this.register = function () {
-            debugger;
             console.log(self.registration);
             authSvc.saveRegistration(self.registration).then(function (data) {
-                debugger;
                 authSvc.login(data.data.Email, data.data.Password).then(function (success) {
                     $state.go('household.join');
                 });

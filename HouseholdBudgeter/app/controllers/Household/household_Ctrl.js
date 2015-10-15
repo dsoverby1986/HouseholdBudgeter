@@ -4,6 +4,7 @@
 
             var self = this;
             this.$state = $state;
+            this.error = "";
 
             this.leaveHousehold = function () {
                 return confirmModalSvc.open("Are you sure you want to leave this household? You will no longer have access to any accounts!", function () {
@@ -20,11 +21,16 @@
             this.sendInvite = function (inviteEmail) {
                 return confirmModalSvc.open("Do you want to invite this user?", function () {
                     return householdSvc.sendInvite(inviteEmail)
-                }, function () {
-                    $state.go('household.details', null, { reload: true })
-                    }, "md", function () {
-                    $state.go('household.details', null, { reload: true })
+                }, function (data) {
+                    console.log(data);
+                    if (data == "noEmail") {
+                        self.error = "noEmail";
                     }
+                    else{
+                        $state.go('household.details', null, { reload: true })
+                    }}, "md", function () {
+                        $state.go('household.details', null, { reload: true })
+                        }
                 );
             }
         }]);

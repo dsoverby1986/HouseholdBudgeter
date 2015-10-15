@@ -12,7 +12,7 @@
             <!-- Advanced Tables -->
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Account Balance: {{accountDetails.account.Balance | currency}}<span class="pull-right">Transactions</span>
+                    <span>Account Balance: {{accountDetails.account.Balance | currency}}</span><span style="margin-left:4%;">Reconciled Balance: {{accountDetails.account.ReconciledBalance | currency}}</span><span class="pull-right">Transactions</span>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
@@ -24,11 +24,16 @@
                                     <th field-name="Created" enable-ssorting="true" display-name="Date" display-align="center" enable-filtering="false" display-format="date:'mediumDate'"></th>
                                     <th field-name="Amount" enable-sorting="true" display-name="Amount" display-align="center" enable-filtering="false" display-format="currency"></th>
                                     <th field-name="Category.Name" enable-sorting="true" display-name="Category" display-align="center" enable-filtering="false"></th>
+                                    <th enable-sorting="true" display-name="Status" display-align="center" enable-filtering="false"></th>
                                     <th enable-sorting="false" display-name="Actions" display-align="center" enable-filtering="false"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>
+                                        <span ng-if="gridItem.Settled == true">Reconciled</span>
+                                        <span ng-if="gridItem.Settled == false">Unsettled</span>
+                                    </td>
                                     <td>
                                         <!--ui-sref="budget.list.editItem({ id: item.Id })"-->
                                         <div ng-hide="gridItem.Description == 'Account Initialization' || gridItem.Description == 'Manual Account Balance Adjustment'">

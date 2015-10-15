@@ -138,9 +138,20 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PutAccount(Account account)
         {
-            if (!ModelState.IsValid)
+            string badRequestDescription = "";
+
+            if (account.Name == "" || account.Name == null)
             {
-                return BadRequest(ModelState);
+                badRequestDescription = "nameError";
+
+                return Ok(badRequestDescription);
+            }
+
+            if (account.Balance == 0)
+            {
+                badRequestDescription = "balanceError";
+
+                return Ok(badRequestDescription);
             }
             
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -162,12 +173,16 @@ namespace HouseholdBudgeter.Controllers
                 {
                     Description = "Manual Account Balance Adjustment",
                     Amount = adjustmentAmount,
+                    Reconciled = adjustmentAmount,
                     Created = DateTimeOffset.Now,
                     AccountId = account.Id,
-                    CategoryId = 5
+                    CategoryId = 5,
+                    Settled = true
                 };
 
                 existingAccount.Balance = account.Balance;
+
+                existingAccount.ReconciledBalance = account.Balance;
 
                 db.Transactions.Add(trans);
             }
@@ -206,6 +221,7 @@ namespace HouseholdBudgeter.Controllers
                 AccountId = account.Id, 
                 Description = "Manual adjustment of account balance.", 
                 Amount = adjustment, 
+                Reconciled = adjustment,
                 CategoryId = 1 ,
                 Created = DateTimeOffset.Now
             });
@@ -222,9 +238,20 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> PostAccount(Account account)
         {
-            if (!ModelState.IsValid)
+            string badRequestDescription = "";
+
+            if (account.Name == "" || account.Name == null)
             {
-                return BadRequest(ModelState);
+                badRequestDescription = "nameError";
+
+                return Ok(badRequestDescription);
+            }
+
+            if (account.Balance == 0)
+            {
+                badRequestDescription = "balanceError";
+
+                return Ok(badRequestDescription);
             }
 
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -235,6 +262,7 @@ namespace HouseholdBudgeter.Controllers
             }
             account.HouseholdId = (int)user.HouseholdId;
             account.Household = db.Households.Find(user.HouseholdId);
+            account.ReconciledBalance = account.Balance;
             
             db.Accounts.Add(account);
             await db.SaveChangesAsync();
@@ -243,10 +271,12 @@ namespace HouseholdBudgeter.Controllers
             {
                 Description = "Account Initialization",
                 Amount = account.Balance,
+                Reconciled = account.Balance,
                 CategoryId = 6,
                 Created = DateTimeOffset.Now,
                 AccountId = account.Id,
-                IsIncome = true
+                IsIncome = true,
+                Settled = true
             };
 
             db.Transactions.Add(trans);

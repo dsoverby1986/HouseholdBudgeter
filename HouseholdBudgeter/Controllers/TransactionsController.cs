@@ -36,6 +36,13 @@ namespace HouseholdBudgeter.Controllers
 
             var account = db.Accounts.Find(id);
             var transList = account.Transactions.ToList();
+            foreach (var trans in transList)
+            {
+                if (Math.Abs(trans.Amount) == Math.Abs(trans.Reconciled))
+                {
+                    trans.Settled = true;
+                }
+            }
 
             return Ok(transList);
             
@@ -75,6 +82,27 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutTransaction(Transaction trans)
         {
+            string badRequestDescription = "";
+
+            if (trans.Description == "" || trans.Description == null)
+            {
+                badRequestDescription = "descriptionError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (trans.Amount == 0)
+            {
+                badRequestDescription = "amountError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (trans.CategoryId == 0 || trans.CategoryId == null)
+            {
+                badRequestDescription = "categoryError";
+
+                return Ok(badRequestDescription);
+            }
+
             //check the incoming model's validity
             if (!ModelState.IsValid)
             {
@@ -105,10 +133,23 @@ namespace HouseholdBudgeter.Controllers
             {//change the value to reflect an expense
                 if (trans.Amount > 0)
                     trans.Amount *= -1;
+
+                if (trans.Reconciled > 0)
+                    trans.Reconciled *= -1;
             }
             else//if for some reason the user is editing and sets the amount of an income tranaction to be negative change the value to reflect an income
+            {
                 if (trans.Amount < 0)
                     trans.Amount *= -1;
+
+                if (trans.Reconciled < 0)
+                    trans.Reconciled *= -1;
+            }
+
+            if (Math.Abs(trans.Amount) == Math.Abs(trans.Reconciled))
+            {
+                trans.Settled = true;
+            }
 
             //look up the transaction in the database
             var existingTrans = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == trans.Id);
@@ -120,10 +161,17 @@ namespace HouseholdBudgeter.Controllers
             etaBalance -= etaAmount;
             etaBalance += trans.Amount;
 
+            var etaRecBalance = existingTrans.Account.ReconciledBalance;
+            var etaRec = existingTrans.Reconciled;
+
+            etaRecBalance -= etaRec;
+            etaRecBalance += trans.Reconciled;
+
             var account = db.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
 
             account.Balance = etaBalance;
-
+            account.ReconciledBalance = etaRecBalance;
+            
             db.Entry(trans).State = EntityState.Modified;
 
             if (trans.Category.Id != 0)
@@ -158,6 +206,27 @@ namespace HouseholdBudgeter.Controllers
         [ResponseType(typeof(Transaction))]
         public async Task<IHttpActionResult> PostTransaction(Transaction trans)
         {
+            string badRequestDescription = "";
+
+            if (trans.Description == "" || trans.Description == null)
+            {
+                badRequestDescription = "descriptionError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (trans.Amount == 0)
+            {
+                badRequestDescription = "amountError";
+
+                return Ok(badRequestDescription);
+            }
+            else if (trans.CategoryId == 0 || trans.CategoryId == null)
+            {
+                badRequestDescription = "categoryError";
+
+                return Ok(badRequestDescription);
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -172,15 +241,32 @@ namespace HouseholdBudgeter.Controllers
             {
                 if (trans.Amount > 0)
                     trans.Amount *= -1;
+
+                if (trans.Reconciled > 0)
+                    trans.Reconciled *= -1;
             }
             else
+            {
                 if (trans.Amount < 0)
                     trans.Amount *= -1;
 
+                if (trans.Reconciled < 0)
+                    trans.Reconciled *= -1;
+            }
+                
+
             trans.Created = DateTimeOffset.Now;
             var account = db.Accounts.FirstOrDefault(a => a.Id == trans.AccountId);
+
             account.Balance = account.Balance + trans.Amount;
 
+            if (Math.Abs(trans.Amount) == Math.Abs(trans.Reconciled))
+            {
+                trans.Settled = true;
+            }
+
+            account.ReconciledBalance += trans.Reconciled;
+                
             if (trans.Category.Id != 0)
             {
                 trans.CategoryId = trans.Category.Id;
@@ -208,6 +294,7 @@ namespace HouseholdBudgeter.Controllers
             }
 
             account.Balance -= transaction.Amount;
+            account.ReconciledBalance -= transaction.Reconciled;
             
             db.Transactions.Remove(transaction);
             await db.SaveChangesAsync();

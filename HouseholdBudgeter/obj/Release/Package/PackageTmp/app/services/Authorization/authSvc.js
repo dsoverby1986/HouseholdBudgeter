@@ -12,10 +12,7 @@ angular.module('HouseholdBudgeter')
     };
 
     var _saveRegistration = function (registration) {
-        console.log("authSvc");
-        console.log(registration);
         _logout();
-        debugger;
         return $http.post(serviceBase + 'api/account/register', registration).then(function (response) {
             return response;
         });
@@ -23,7 +20,6 @@ angular.module('HouseholdBudgeter')
     };
 
     var _login = function (username, password) {
-
         var data = "grant_type=password&username=" + username + "&password=" + password;
 
         var deferred = $q.defer();
@@ -42,7 +38,6 @@ angular.module('HouseholdBudgeter')
             _logout();
             deferred.reject(err);
         });
-
         return deferred.promise;
 
     };

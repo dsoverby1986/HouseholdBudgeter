@@ -3,7 +3,6 @@
         .controller('account_list_details_Ctrl', ['confirmModalSvc', 'transactionSvc', 'accountSvc', '$stateParams', 'account', '$state', '$scope',
             function (confirmModalSvc, transactionSvc, accountSvc, $stateParams, account, $state, $scope) {
 
-                console.log("accountDetailsCtrl - in there");
                 var self = this;
 
                 this.transId = $stateParams.transId;
@@ -18,8 +17,6 @@
                     })
                 }
 
-                console.log(account)
-
                 this.deleteTrans = function (transId) {
                     return confirmModalSvc.open("Are you sure you want to delete this transaction?", function () {
                         return transactionSvc.deleteTransaction(transId)}, function () {
@@ -32,7 +29,6 @@
                /* this.deleteTrans = function (transId) {
                     return confirmModalSvc.open("Are you sure you want to delete this transaction?", function () {
                         return transactionSvc.deleteTransaction(transId), function () {
-                            debugger;
                             $scope.$root.$broadcast('transaction-updated');
                             $state.go('accounts.list.details', null, { reload: true });
                         }

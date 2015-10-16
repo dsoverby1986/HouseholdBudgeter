@@ -10,12 +10,37 @@
     <div class="row">
         <div class="col-md-12">
             <!-- Advanced Tables -->
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     Accounts
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
+                        <table tr-ng-grid="" items="accountsList.accounts" page-items="10" class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th field-name="Name" enable-sorting="true" display-name="Account Name" display-align="center" enable-filtering="false"></th>
+                                    <th field-name="Balance" enable-sorting="true" display-name="Balance" display-align="center" enable-filtering="false" display-format="currency"></th>
+                                    <th field-name="ReconciledBalance" enable-sorting="true" display-name="Reconciled Balance" display-align="center" enable-filtering="false" display-format="currency"></th>
+                                    <th enable-sorting="false" display-name="Actions" display-align="center" enable-filtering="false"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!--ui-sref="budget.list.editItem({ id: item.Id })"-->
+                                        <a ui-sref="accounts.list.details({ id: gridItem.Id })"><i class="fa fa-info-circle fa-lg" tooltip="Details"></i></a> <span> | </span>
+                                        <a ui-sref="accounts.list.edit({ id: gridItem.Id })"><i class="fa fa-pencil-square fa-lg" tooltip="Edit"></i></a> <span> | </span>
+                                        <a ui-sref="accounts.list" ng-click="accounts.archiveAccount(gridItem.Id)" style="cursor:pointer"><i class="fa fa-archive fa-lg" tooltip="Archive"></i></a>
+                                        <!-- <div class="btn-group">
+                         <label type=" button" class="btn btn-primary btn-sm" ng-click="accountDetails.beginEdit(gridItem.id)"><i class="fa fa-edit m-r-5"></i></label>
+                         <label type="button" class="btn btn-danger btn-sm" ng-click="accountDetails.beginDelete(gridItem.id)"><i class="fa fa-trash m-r-5"></i></label>
+                     </div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--
                         <table class="table table-striped table-bordered table-hover" id="accountsList">
                             <thead>
                                 <tr>
@@ -34,9 +59,10 @@
                                         <a ui-sref="accounts.list" ng-click="accounts.archiveAccount(account.Id)"><i class="fa fa-archive fa-lg" tooltip="Archive"></i></a>
                                     </td>
                             </tbody>
-                        </table>
+                        </table>-->
                     </div>
                     <a ui-sref="accounts.list.create">Create Account</a>
+                    <a ng-show="accountsList.accCount > 0" href="http://huffingtonpost.tumblr.com/post/87129901194/the-baby-on-the-left-needs-to-get-more-into-it" target="_blank" class="pull-right">Account Balances Got You Down? Click Here To Lighten The Mood!</a>
                 </div>
             </div>
             <!--End Advanced Tables -->

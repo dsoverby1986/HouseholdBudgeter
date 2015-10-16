@@ -23,17 +23,35 @@
                 this.getCategories = function () {
                     categorySvc.getCategories().then(function (data) {
                         self.categories = data;
-                        console.log(data);
                     })
                 }
 
+                this.error = "";
+
                 this.createTrans = function () {
-                    debugger;
-                    console.log(self.transaction);
-                    self.transaction.CategoryId = self.transaction.category.Id;
-                    transactionSvc.createTransaction(self.transaction).then(function () {
-                        $scope.$root.$broadcast('transaction-updated');
-                        $state.go('accounts.list.details', null, { reload: true });
+                    if (self.transaction.category.Id == undefined)
+                    {
+                        self.transaction.CategoryId = 0;
+                    }
+                    else
+                    {
+                        self.transaction.CategoryId = self.transaction.category.Id;
+                    }
+                    transactionSvc.createTransaction(self.transaction).then(function (data) {
+                        switch (data) {
+                            case "descriptionError":
+                                self.error = "descriptionError";
+                                break;
+                            case "amountError":
+                                self.error = "amountError";
+                                break;
+                            case "categoryError":
+                                self.error = "categoryError";
+                                break;
+                            default:
+                                $scope.$root.$broadcast('transaction-updated');
+                                $state.go('accounts.list.details', null, { reload: true });
+                        }
                     })
                 }
         }]);

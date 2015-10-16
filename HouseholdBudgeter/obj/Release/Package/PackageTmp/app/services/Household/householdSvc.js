@@ -10,16 +10,13 @@
         }
 
         f.createHousehold = function (name) {
-            console.log("householdSvc.createHousehold()");
-            console.log(name);
-            debugger;
             return $http.post('/api/Account/CreateHousehold', { Name: name }).then(function (response) {
                 return response.data;
             });
         }
 
         f.joinHousehold = function (inviteEmail, code) {
-            return $http.post('/api/account/joinhousehold', inviteEmail, code).then(function (response) {
+            return $http.post('/api/account/joinhousehold', { InvitedEmail: inviteEmail, Code: code }).then(function (response) {
                 return response.data;
             });
         }
@@ -37,10 +34,23 @@
         }
 
         f.sendInvite = function (inviteEmail) {
-            return $http.post('/api/account/sendinvite', {Email: inviteEmail}).then(function (response) {
+            return $http.post('/api/account/sendinvite', { Email: inviteEmail }).then(function (response) {
+                console.log(response.data);
                 return response.data;
             });
         }
+
+        f.getUser = function () {
+            return $http.post('/api/account/getuser').then(function (response) {
+                return response.data;
+            })
+        }
+
+        /*f.goodToGoStatus = function () {
+            return $http.post('/api/account/goodtogostatus').then(function (response) {
+                return response.data;
+            })
+        }*/
 
         return f;
 

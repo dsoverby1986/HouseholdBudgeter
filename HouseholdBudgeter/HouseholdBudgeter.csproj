@@ -280,6 +280,7 @@
     <Content Include="app\services\Authorization\authSvc.js" />
     <Content Include="app\services\Budget\budgetItemSvc.js" />
     <Content Include="app\services\Categories\categorySvc.js" />
+    <Content Include="app\services\Modals\accessDeniedModalSvc.js" />
     <Content Include="app\services\Modals\confirmModalSvc.js" />
     <Content Include="app\services\Household\householdSvc.js" />
     <Content Include="app\services\Transactions\transactionSvc.js" />

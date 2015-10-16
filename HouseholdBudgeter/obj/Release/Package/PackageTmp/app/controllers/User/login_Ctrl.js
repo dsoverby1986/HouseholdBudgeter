@@ -1,22 +1,31 @@
 ﻿'use strict';
-angular.module('HouseholdBudgeter').controller('login_Ctrl', ['authSvc', '$state', function (authSvc, $state) {
+angular.module('HouseholdBudgeter').controller('login_Ctrl', ['householdSvc', 'authSvc', '$state', function (householdSvc, authSvc, $state) {
     var self = this;
 
     self.username = '';
     self.password = '';
 
-    self.errors = null;
+    self.error = null;
+
+    this.user = {};
 
     self.submit = function () {
         authSvc.login(self.username, self.password).then(function (success) {
-            console.log(success);
-            debugger;
-            if (success.householdId == "" || success.householdId == null)
+            if (success.householdId == "" || success.householdId == null) {
                 $state.go('household.join');
-            console.log("Goto dashboard");
-            $state.go('dashboard');
+            }
+            else
+            {
+                $state.go('dashboard');
+            }
         }, function (error) {
-            self.errors = error.data;
+            self.error = error.error_description;
+        });
+    }
+
+    this.getUser = function () {
+        householdSvc.getUser().then(function (data) {
+            self.user = data;
         });
     }
 }])

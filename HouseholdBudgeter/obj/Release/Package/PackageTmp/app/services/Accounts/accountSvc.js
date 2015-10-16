@@ -27,17 +27,22 @@
             });
         }
 
-        f.editAccount = function (name, balance, id) {
-            return $http.post('/api/accounts/editaccount', { Name: name, Balance: balance, Id: id }).then(function (response) {
+        f.editAccount = function (account) {
+            return $http.post('/api/accounts/editaccount', account).then(function (response) {
                 return response.data;
             });
         }
 
         f.archiveAccount = function (id) {
-            console.log(id);
             return $http.post('/api/accounts/archiveaccount', id).then(function (response) {
                 return response.data;
             });
+        }
+
+        f.getCountForActiveAccounts = function () {
+            return $http.post('/api/accounts/activeaccountscount').then(function (response) {
+                return response.data;
+            })
         }
 
         return f;

@@ -180,8 +180,9 @@
           })
     });
 
-    var serviceBase = 'http://localhost:58596/';
+    //var serviceBase = 'http://localhost:58596/';
     //var serviceBase = 'http://dsomoney.azurewebsites.net/';
+    var serviceBase = '/';
 
     app.constant('ngAuthSettings', {
         apiServiceBaseUri: serviceBase
@@ -195,6 +196,7 @@
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         authService.fillAuthData();
+        //householdSvc.goodToGoStatus();
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (toState.data && toState.data.requiresHousehold === true) {

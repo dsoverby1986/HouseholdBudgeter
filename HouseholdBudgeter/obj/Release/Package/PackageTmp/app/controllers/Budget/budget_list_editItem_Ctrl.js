@@ -2,8 +2,6 @@
     angular.module('HouseholdBudgeter')
         .controller('budget_list_editItem_Ctrl', ['budgetItem', '$stateParams', 'budgetItemSvc', '$state', 
             function (budgetItem, $stateParams, budgetItemSvc, $state) {
-                console.log('in budget edit controller');
-                console.log(budgetItem);
 
                 this.budgetItem = budgetItem;
 
@@ -20,18 +18,33 @@
                     });
                 }
 
-           
+                this.error = "";
 
-
-                //data binding not correct. coming up with inappropriate values when saving edited budget item. figue something out guy
                 this.editBudgetItem = function (budgetItem) {     
                     if (typeof (budgetItem.Category) == "string")
                         budgetItem.Category = { Id: 0, Name: budgetItem.Category };
+                    if (budgetItem.Category == undefined) {
+                        budgetItem.Category = { Id: 0, Name: "" };
+                    }
                     budgetItem.CategoryId = budgetItem.Category.Id;
                     budgetItemSvc.editBudgetItem(budgetItem).then(function (data) {
-                        self.item = data;
+                        switch (data) {
+                            case "itemNameError":
+                                self.error = "itemNameError";
+                                break;
+                            case "limitAmountError":
+                                self.error = "limitAmountError";
+                                break;
+                            case "frequencyError":
+                                self.error = "frequencyError";
+                                break;
+                            case "categoryError":
+                                self.error = "categoryError";
+                                break;
+                            default:
+                                $state.go('budget.list', null, { reload: true });
+                        }
                     })
                 }
-
         }]);
 })();

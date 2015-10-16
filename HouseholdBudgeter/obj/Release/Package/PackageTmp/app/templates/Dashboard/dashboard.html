@@ -1,7 +1,97 @@
-﻿<h2>This page will have charts and graphs reporting the efficiencies of the household's budget.</h2>
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <nvd3 options="dashboardDetails.options" data="dashboardDetails.values" style="width:100% !important"></nvd3>
+﻿<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">
+            Dashboard <small>For The {{dashboardDetails.household.Name}} Household</small>
+        </h1>
     </div>
-    <!--{{dashboardDetails.values}}-->
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Accounts
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group" ng-repeat="account in dashboardDetails.accounts">
+                                <a ui-sref="accounts.list.details({ id: account.Id })" class="list-group-item">
+                                    <span class="badge">{{account.Balance | currency }}</span>
+                                    <i class="fa fa-fw fa-university"></i> {{account.Name}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Recent Transactions
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group" ng-repeat="trans in dashboardDetails.transactions">
+                                <a ui-sref="accounts.list.details({ id: trans.AccountId })" class="list-group-item">
+                                    <span class="badge">{{trans.Amount | currency}}</span>
+                                    <i class="fa fa-fw fa-money"></i> {{trans.Desc}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+        <!--</div>-->
+        <!-- /. ROW  -->
+        <!--<div class="row">-->
+            <div class="col-md-8" style="padding-left:5%;">
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                This Month's Spending vs Budgeted
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <nvd3 options="dashboardDetails.options" data="dashboardDetails.values" style="width:100% !important"></nvd3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                This Year's Spending By Month
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <nvd3 options="dashboardDetails.options" data="dashboardDetails.valuesMonthly" style="width:100% !important"></nvd3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--<div class="col-md-6 col-md-offset-1">
+                <nvd3 options="dashboardDetails.options" data="dashboardDetails.values" style="width:100% !important"></nvd3>
+            </div>
+            {{dashboardDetails.values}}-->
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4">
+                
+            </div>
+            <div class="col-md-8">
+                
+            </div>
+        </div>
+    </div>
 </div>

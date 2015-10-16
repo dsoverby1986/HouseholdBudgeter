@@ -675,6 +675,31 @@ namespace HouseholdBudgeter.Controllers
             return Ok(user);
         }
 
+        /*[AllowAnonymous]
+        [HttpPost, Route("GoodToGoStatus")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GoodToGoStatus()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            var goodToGoStatus = "";
+
+            if (user == null)
+            {
+                goodToGoStatus = "noGood";
+            }
+            else if (user.HouseholdId == null || user.HouseholdId.ToString() == "")
+            {
+                goodToGoStatus = "almostGood";
+            }
+            else if(user.HouseholdId != null && user.HouseholdId.ToString() != "")
+            {
+                goodToGoStatus = "allGood";
+            }
+
+            return Ok(goodToGoStatus);
+        }*/
+
         private bool HouseholdExists(int id)
         {
             return db.Households.Count(e => e.Id == id) > 0;

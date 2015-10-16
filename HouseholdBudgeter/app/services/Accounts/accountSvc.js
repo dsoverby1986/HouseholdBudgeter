@@ -39,6 +39,12 @@
             });
         }
 
+        f.getCountForActiveAccounts = function () {
+            return $http.post('/api/accounts/activeaccountscount').then(function (response) {
+                return response.data;
+            })
+        }
+
         return f;
 
     }])

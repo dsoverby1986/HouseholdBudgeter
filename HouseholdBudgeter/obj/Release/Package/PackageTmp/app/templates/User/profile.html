@@ -1,0 +1,33 @@
+﻿<div ui-view>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">
+                Profile Information <small>For {{profile.user.FirstName}} {{profile.user.LastName}}</small>
+            </h1>
+        </div>
+    </div>
+    <!-- /. ROW  -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">User Information</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <p>Name: {{profile.user.FirstName}} {{profile.user.LastName}}</p>
+                        <p>Email: {{profile.user.Email}}</p>
+                        <p>You have been a registered user since {{profile.user.Created | date: 'fullDate'}}.</p>
+                        <p ng-show="profile.user.HouseholdId != null">You have been a member of the {{profile.user.Household.Name}} household since {{profile.user.JoinedHousehold | date: 'fullDate'}}.</p>
+                        <p ng-show="profile.user.HouseholdId == null">Currently, you belong to no household. Gently click this link to <a ui-sref="household.join">join or create a household.</a></p>
+                        
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <a ui-sref="profile.changepassword"><i class="fa fa-fw fa-user-secret"></i>Change Password</a>
+                    <a ng-click="profile.obliterateUserAccount(profile.user.Id)" class="pull-right" style="cursor:pointer;"><i class="fa fa-fw fa-warning"></i>Obliterate My Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

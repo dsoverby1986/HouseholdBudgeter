@@ -10,18 +10,19 @@
 
             this.code = "";
 
+            this.$state = $state;
+
             this.createHousehold = function () {
-                console.log("household_join_Ctrl.createHousehold()")
-                console.log(self.name);
-                debugger;
                 householdSvc.createHousehold(self.name).then(function (data) {
+                    debugger;
+                    $state.go($state.current, null, { reload: true });
                     $state.go('household.details');
                 });
             }
 
             this.joinHouse = function (email, code) {
                 householdSvc.joinHousehold(email, code).then(function (data) {
-                    $state.go('household.details');
+                    $state.go('household.details', null, { reload: true });
                 });
             }
 

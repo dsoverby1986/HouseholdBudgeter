@@ -20,7 +20,7 @@
                             <div class="list-group" ng-repeat="account in dashboardDetails.accounts">
                                 <a ui-sref="accounts.list.details({ id: account.Id })" class="list-group-item">
                                     <span class="badge">{{account.Balance | currency }}</span>
-                                    <i class="fa fa-fw fa-comment"></i> {{account.Name}}
+                                    <i class="fa fa-fw fa-university"></i> {{account.Name}}
                                 </a>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                             <div class="list-group" ng-repeat="trans in dashboardDetails.transactions">
                                 <a ui-sref="accounts.list.details({ id: trans.AccountId })" class="list-group-item">
                                     <span class="badge">{{trans.Amount | currency}}</span>
-                                    <i class="fa fa-fw fa-comment"></i> {{trans.Desc}}
+                                    <i class="fa fa-fw fa-money"></i> {{trans.Desc}}
                                 </a>
                             </div>
                         </div>

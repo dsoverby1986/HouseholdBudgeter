@@ -14,19 +14,19 @@
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createTransDesc" style="width:100px;">Description</label>
-                                <input placeholder="Description" style="width:500px; display:inline-block;" ng-model="createTransCtrl.transaction.description" type="text" name="description" id="createTransDesc" class="form-control" autofocus />
+                                <input placeholder="Description" style="width:500px; display:inline-block;" ng-model="createTransCtrl.transaction.description" type="text" name="description" id="createTransDesc" class="form-control" required autofocus />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createTransAmount" style="width:100px;">Amount</label>
-                                <input placeholder="Amount" style="width:500px; display:inline-block;" ng-model="createTransCtrl.transaction.amount" type="text" name="amount" id="createTransAmount" class="form-control" />
+                                <input placeholder="Amount" style="width:500px; display:inline-block;" ng-model="createTransCtrl.transaction.amount" type="text" name="amount" id="createTransAmount" class="form-control" required />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-lg-12">
                                 <label for="createTransRec" style="width:100px;">Reconciled</label>
-                                <input type="text" placeholder="Reconciled" style="width:500px; display: inline-block" ng-model="createTransCtrl.transaction.reconciled" name="reconciled" id="createTransRec" class="form-control" />
+                                <input type="text" placeholder="Reconciled" style="width:500px; display: inline-block" ng-model="createTransCtrl.transaction.reconciled" name="reconciled" id="createTransRec" class="form-control" required />
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
@@ -36,7 +36,7 @@
                                        ng-model="createTransCtrl.transaction.category" style="width:500px; display:inline-block;"
                                        typeahead-on-select="createTransCtrl.transaction.category = $item"
                                        typeahead="category as category.Name for category in createTransCtrl.categories | filter:$viewValue | limitTo:8"
-                                       id="transEditCat" class="form-control">
+                                       id="transEditCat" class="form-control" required>
                             </div>
                         </div>
                         <div class="row" style="padding-bottom:10px;">
@@ -60,7 +60,11 @@
                             </div>
                             <br />
                             <br />
-
+                            <div id="errors">
+                                <div ng-show="createTransCtrl.error == 'descriptionError'" style="color:red;"><div>Please provide a description for this transaction.</div><br /><br /></div>
+                                <div ng-show="createTransCtrl.error == 'amountError'" style="color:red;"><div>Please provide a valid amount for this transaction. The amount must be a numeric value. Also, you may not leave the amount blank or set it to $0.00.</div><br /><br /></div>
+                                <div ng-show="createTransCtrl.error == 'categoryError'" style="color:red;"><div>When specifying a category, you may not specify a category that has not been created through the process of creating a <a ui-sref="budget.list.createItem">new budget item</a>. Also, you may not leave this transaction's category property unspecified.</div><br /><br /></div>
+                            </div>
                             <div style="margin-left:30px;">
                                 <a ui-sref="accounts.list.details({ id: accountDetails.account.Id })">Back To {{accountDetails.account.Name}} Account Details</a>
                             </div>

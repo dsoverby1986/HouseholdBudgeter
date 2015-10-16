@@ -53,7 +53,9 @@
                     }, function () {
                         $scope.$root.$broadcast('transaction-updated');
                         $state.go('accounts.list', null, { reload: true });
-                    }, "md"
+                    }, "md"/*, function () {
+                        $state.go('accounts.list', null, { reload: true });
+                    }*/
                 );
             }
     }])

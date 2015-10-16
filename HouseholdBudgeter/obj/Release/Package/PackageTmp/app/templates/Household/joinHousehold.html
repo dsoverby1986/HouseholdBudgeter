@@ -1,4 +1,55 @@
-﻿<div class="row">
+﻿<div ui-view>
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">
+                Create or Join a Household
+            </h1>
+        </div>
+    </div>
+    <!-- /. ROW  -->
+    <!-- /. ROW  -->
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Advanced Tables -->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Create Household
+                </div>
+                <div class="panel-body">
+                    <form>
+                        <input ng-model="houseJoin.name" type="text" placeholder="Household Name" class="form-control" required>
+                        <br />
+                        <button type="submit" ng-click="houseJoin.createHousehold(houseJoin.name)" class="btn btn-primary">Create</button>
+                    </form>
+                    <br />
+                    <span>When creating a new household, you may want to consider a name that represents a commonality among the users that will be members of your household.</span>
+                </div>
+            </div>
+            <!--End Advanced Tables -->
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Join Household
+                </div>
+                <div class="panel-body">
+                    <form>
+                        <input ng-model="houseJoin.email" type="email" placeholder="Invited Email" class="form-control" />
+                        <br />
+                        <input ng-model="houseJoin.code" type="text" placeholder="Invite Code" class="form-control" />
+                        <br />
+                        <button type="submit" ng-click="houseJoin.joinHouse(houseJoin.email, houseJoin.code)" class="btn btn-primary">Join</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+<!--
+
+<div class="row">
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-6 col-lg-offset-1">
@@ -10,7 +61,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-1">
                 <form>
-                    <input ng-model="houseJoin.name" type="text" placeholder="Household Name">
+                    <input ng-model="houseJoin.name" type="text" placeholder="Household Name" required>
                     <button type="submit" ng-click="houseJoin.createHousehold(houseJoin.name)">Create</button>
                 </form>
             </div>
@@ -22,15 +73,15 @@
         </div>
         <br />
         <br />
-
         <div class="row">
             <div class="col-lg-8 col-lg-offset-1">
                 <form>
                     <input ng-model="houseJoin.email" type="email" placeholder="Invited Email" />
                     <input ng-model="houseJoin.code" type="text" placeholder="Invite Code" />
-                    <button type="submit" ng-click="houseJoin.joinHousehold(houseJoin.email, houseJoin.code)">Join</button>
+                    <button type="submit" ng-click="houseJoin.joinHouse(houseJoin.email, houseJoin.code)">Join</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+-->

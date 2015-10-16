@@ -10,12 +10,45 @@
     <div class="row">
         <div class="col-md-12">
             <!-- Advanced Tables -->
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Account Balance: {{accountDetails.account.Balance | currency}}<span class="pull-right">Transactions</span>
+                    <span>Account Balance: {{accountDetails.account.Balance | currency}}</span><span style="margin-left:4%;">Reconciled Balance: {{accountDetails.account.ReconciledBalance | currency}}</span><span class="pull-right">Transactions</span>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
+
+                        <table tr-ng-grid="" items="accountDetails.account.Transactions" page-items="10" class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th field-name="Description" enable-sorting="true" display-name="Description" display-align="center" enable-filtering="false"></th>
+                                    <th field-name="Created" enable-ssorting="true" display-name="Date" display-align="center" enable-filtering="false" display-format="date:'mediumDate'"></th>
+                                    <th field-name="Amount" enable-sorting="true" display-name="Amount" display-align="center" enable-filtering="false" display-format="currency"></th>
+                                    <th field-name="Category.Name" enable-sorting="true" display-name="Category" display-align="center" enable-filtering="false"></th>
+                                    <th enable-sorting="true" display-name="Status" display-align="center" enable-filtering="false"></th>
+                                    <th enable-sorting="false" display-name="Actions" display-align="center" enable-filtering="false"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span ng-if="gridItem.Settled == true">Reconciled</span>
+                                        <span ng-if="gridItem.Settled == false">Unsettled</span>
+                                    </td>
+                                    <td>
+                                        <!--ui-sref="budget.list.editItem({ id: item.Id })"-->
+                                        <div ng-hide="gridItem.Description == 'Account Initialization' || gridItem.Description == 'Manual Account Balance Adjustment'">
+                                            <a ui-sref="accounts.list.details.editTrans({transId: gridItem.Id})"><i class="fa fa-pencil-square fa-lg" tooltip="Edit"></i></a> <span> | </span>
+                                            <a ng-click="accountDetails.deleteTrans(gridItem.Id)" style="cursor:pointer"><i class="fa fa-trash-o fa-lg" tooltip="Delete"></i></a>
+                                        </div>
+                                        <!-- <div class="btn-group">
+            <label type=" button" class="btn btn-primary btn-sm" ng-click="accountDetails.beginEdit(gridItem.id)"><i class="fa fa-edit m-r-5"></i></label>
+            <label type="button" class="btn btn-danger btn-sm" ng-click="accountDetails.beginDelete(gridItem.id)"><i class="fa fa-trash m-r-5"></i></label>
+        </div>-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                                 <tr>
@@ -38,10 +71,11 @@
                                     </td>
                             </tbody>
                         </table>
+                            -->
                     </div>
                     <a ui-sref="accounts.list.details.createTrans({ id: accountDetails.account.Id })">New Transaction</a>
-                    <br />
-                    <a ui-sref="accounts.list">Back To Accounts</a>
+                    <!--<span> | </span>-->
+                    <a ui-sref="accounts.list" class="pull-right">Back To Accounts</a>
                 </div>
             </div>
             <!--End Advanced Tables -->

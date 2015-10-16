@@ -13,6 +13,8 @@ angular.module('HouseholdBudgeter').
         this.confirmPassword = "";
 
         this.registration = {
+            FirstName: self.firstName,
+            LastName: self.lastName,
             Email: self.email,
             Password: self.password,
             ConfirmPassword: self.confirmPassword
@@ -27,11 +29,11 @@ angular.module('HouseholdBudgeter').
         self.errors = null;
 
         this.register = function () {
-            console.log("register_Ctrl");
             console.log(self.registration);
-            debugger;
             authSvc.saveRegistration(self.registration).then(function (data) {
-                $state.go('household.join');
+                authSvc.login(data.data.Email, data.data.Password).then(function (success) {
+                    $state.go('household.join');
+                });
         });
     }
 

@@ -46,6 +46,12 @@
             })
         }
 
+        /*f.goodToGoStatus = function () {
+            return $http.post('/api/account/goodtogostatus').then(function (response) {
+                return response.data;
+            })
+        }*/
+
         return f;
 
     }])

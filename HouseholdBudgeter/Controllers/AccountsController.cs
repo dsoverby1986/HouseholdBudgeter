@@ -304,6 +304,14 @@ namespace HouseholdBudgeter.Controllers
             return Ok("The " + account.Name + " account has been archived. It, and any transactions belonging to it, will no longer be available to any members of the " + user.Household.Name + " household.");
         }
 
+        [HttpPost, Route("ActiveAccountsCount")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GetTheCountForTheAccountsThatHaveNotBeenArchived()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            return Ok(user.Household.Accounts.Where(a => a.Archived == false).Count());
+        }
+
         // DELETE: api/Accounts/5
         /*[ResponseType(typeof(Account))]
         public async Task<IHttpActionResult> DeleteAccount(int id)

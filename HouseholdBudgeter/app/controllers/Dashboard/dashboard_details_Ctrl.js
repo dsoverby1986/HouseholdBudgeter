@@ -5,6 +5,8 @@
 
                 var self = this;
 
+                this.$state = $state;
+
                 this.household = household;
 
                 this.user = {};

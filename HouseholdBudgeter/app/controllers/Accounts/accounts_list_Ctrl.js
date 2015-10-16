@@ -8,6 +8,16 @@
 
             this.household = household;
 
+            this.accCount = "";
+
+            this.getCountForActiveAccounts = function () {
+                accountSvc.getCountForActiveAccounts().then(function (data) {
+                    self.accCount = data;
+                })
+            }
+
+            self.getCountForActiveAccounts();
+
             var refresh = function () {
                 accountSvc.getAccounts().then(function (accts) {
                     self.accounts = accts;

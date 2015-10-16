@@ -35,11 +35,12 @@
                 <span class="navbar-brand"><i class="fa fa-home fa-1x"></i>Budgeter</span>
             </div>
 
-            <ul class="nav navbar-top-links navbar-right" ng-controller="navCtrl as nav">
+            <ul class="nav navbar-top-links navbar-right" ng-controller="navCtrl as nav" style="cursor:pointer;">
                 <li class="dropdown" dropdown>
                     <a dropdown-toggle aria-expanded="false">
-                        <i class="fa fa-user fa-fw"></i> {{nav.auth.username}}<i class="fa fa-caret-down"></i>
+                        <i class="fa fa-user fa-fw"></i>{{nav.auth.username}}<i class="fa fa-caret-down"></i>
                     </a>
+                    <!---->
                     <ul class="dropdown-menu dropdown-user">
                         <!--<li>
                             <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -61,7 +62,6 @@
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
-
                     <li>
                         <a class="active-menu" ui-sref="dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
                     </li>
@@ -77,8 +77,23 @@
                     <li>
                         <a ui-sref="profile"><i class="fa fa-user"></i> Profile</a>
                     </li>
+                </ul><!--
+                <ul class="nav" id="main-menu" ng-show="nav.goodToGo == 'almostGood'">
+                    <li>
+                        <a ui-sref="household.join"><i class="fa fa-home"></i> Household</a>
+                    </li>
+                    <li>
+                        <a ui-sref="profile"><i class="fa fa-user"></i> Profile</a>
+                    </li>
+                    <li>
+                        <p>Create or join a household now to start building up a budget and tracking your income and spending in a way that is beneficial for you and any members of your household.</p>
+                    </li>
                 </ul>
-
+                <ul class="nav" id="main-menu" ng-show="nav.goodToGo == 'noGood'">
+                    <li>
+                        <p style="color:white";>To get started, register a new account, then create or join a household to start building up a budget and tracking your income and spending in a way that is beneficial for you and any members of your household.</p>
+                    </li>
+                </ul>-->
             </div>
 
         </nav>

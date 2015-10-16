@@ -9,19 +9,32 @@
         //
         // Now set up the states
         //for one page to be distinguished from another page an entry must go here for that page
-        console.log("approaching stateprovider");
         $stateProvider
           .state('login', {
               url: "/login",
               templateUrl: "/app/templates/user/login.html",
               controller: "login_Ctrl as login"
           })
-            .state('register', {
-                url: "/register",
-                templateUrl: "/app/templates/user/register.html",
-                controller: "register_Ctrl as register"
-            })
-
+          .state('register', {
+              url: "/register",
+              templateUrl: "/app/templates/user/register.html",
+              controller: "register_Ctrl as register"
+          })
+          .state('profile', {
+              url: "/profile",
+              templateUrl: "/app/templates/user/profile.html",
+              controller: "profile_Ctrl as profile",
+              resolve: {
+                  user: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getUser();
+                  }]
+              }
+          })
+          .state('profile.changepassword', {
+              url: "/newpassword",
+              templateUrl: "/app/templates/user/changePassword.html",
+              controller: "change_password_Ctrl as changePassword"
+          })
           .state('home', {
               url: "/home",
               templateUrl: "/app/templates/home.html",
@@ -33,6 +46,11 @@
               templateUrl: "/app/templates/household/household.html",
               controller: "household_Ctrl as house"
           })
+            .state('household.join', {
+              url: "/join",
+              templateUrl: "/app/templates/household/joinHousehold.html",
+              controller: "household_join_Ctrl as houseJoin"
+          })
           .state('household.details', {
               url: "",
               templateUrl: "/app/templates/household/householddetails.html",
@@ -43,16 +61,16 @@
                   }]
               }
           })
-          .state('household.join', {
-              url: "/join",
-              templateUrl: "/app/templates/household/joinHousehold.html",
-              controller: "household_join_Ctrl as houseJoin"
-          })
           .state('dashboard', {
               url: "/dashboard",
               templateUrl: "/app/templates/dashboard/dashboard.html",
               //controller: "dashboard_Ctrl as dashboard"
-              controller: "dashboard_details_Ctrl as dashboardDetails"
+              controller: "dashboard_details_Ctrl as dashboardDetails",
+              resolve: {
+                  household: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getHousehold();
+                  }]
+              }
           })
           .state('accounts', {
               url: "/accounts",
@@ -63,7 +81,15 @@
           .state('accounts.list', {
               url: "",
               templateUrl: "/app/templates/accounts/accountsList.html",
-              controller: "accounts_list_Ctrl as accountsList"
+              controller: "accounts_list_Ctrl as accountsList",
+              resolve: {
+                  household: ['householdSvc', function(householdSvc){
+                      return householdSvc.getHousehold();
+                  }],
+                  accounts: ['accountSvc', function (accountSvc) {
+                      return accountSvc.getAccounts();
+                  }]
+              }
           })
           .state('accounts.list.create', {
               url: "/create",
@@ -76,7 +102,6 @@
               controller: "account_list_details_Ctrl as accountDetails",
               resolve: {
                   account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
-                      console.log($stateParams.id);
                       return accountSvc.getAccount($stateParams.id);
                   }]
               }
@@ -87,7 +112,6 @@
                 controller: "accounts_list_edit_Ctrl as accountEdit",
                 resolve: {
                     account: ['accountSvc', '$stateParams', function (accountSvc, $stateParams) {
-                        console.log($stateParams.id);
                         return accountSvc.getAccount($stateParams.id);
                     }]
                 }
@@ -98,8 +122,6 @@
                 controller: "accounts_list_details_createTrans_Ctrl as createTransCtrl",
                 resolve: {
                     categories: ['$stateParams', 'categorySvc', function ($stateParams, categorySvc) {
-                        console.log($stateParams.id);
-                        console.log('inside createtrans state resolve function');
                         return categorySvc.getCategories();
                     }]
                 }
@@ -110,8 +132,6 @@
                 controller: "accounts_list_details_editTrans_Ctrl as editTransCtrl",
                 resolve: {
                     trans: ['transactionSvc', '$stateParams', function (transactionSvc, $stateParams) {
-                        console.log("inside resolve function calling to transactionSvc");
-                        console.log($stateParams.id);
                         return transactionSvc.getTransaction($stateParams.transId);
                     }]
                 }
@@ -132,6 +152,9 @@
                   }],
                   categories: ['categorySvc', function (categorySvc) {
                       return categorySvc.getCategories();
+                  }],
+                  household: ['householdSvc', function (householdSvc) {
+                      return householdSvc.getHousehold();
                   }]
               }
           })
@@ -151,18 +174,15 @@
               controller: "budget_list_editItem_Ctrl as editItem",
               resolve: {
                   budgetItem: ['budgetItemSvc', '$stateParams', function (budgetItemSvc, $stateParams) {
-                      console.log($stateParams.id);
                       return budgetItemSvc.getBudgetItem($stateParams.id);
                   }]
               }
           })
     });
 
-    console.log("after states list");
-
-
     //var serviceBase = 'http://localhost:58596/';
-    var serviceBase = 'http://dsomoney.azurewebsites.net/';
+    //var serviceBase = 'http://dsomoney.azurewebsites.net/';
+    var serviceBase = '/';
 
     app.constant('ngAuthSettings', {
         apiServiceBaseUri: serviceBase
@@ -176,6 +196,7 @@
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         authService.fillAuthData();
+        //householdSvc.goodToGoStatus();
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if (toState.data && toState.data.requiresHousehold === true) {

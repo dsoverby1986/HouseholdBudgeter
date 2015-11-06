@@ -60,10 +60,10 @@
                         </div>
                         <br />
                         <br />
-                        <div id="errors">
-                            <div ng-show="editTransCtrl.error == 'descriptionError'" style="color:red;"><div>Please provide a description for this transaction.</div><br /><br /></div>
-                            <div ng-show="editTransCtrl.error == 'amountError'" style="color:red;"><div>Please provide a valid amount for this transaction. The amount must be a numeric value. Also, you may not leave the amount blank or set it to $0.00.</div><br /><br /></div>
-                            <div ng-show="editTransCtrl.error == 'categoryError'" style="color:red;"><div>When specifying a category, you may not specify a category that has not been created through the process of creating a <a ui-sref="budget.list.createItem">new budget item</a>. Also, you may not leave this transaction's category property unspecified.</div><br /><br /></div>
+                        <div id="errors" style="margin-left:17%;">
+                            <div ng-show="editTransCtrl.error == 'descriptionError'" style="color:red;"><div>Please provide a description for this transaction.</div><br /></div>
+                            <div ng-show="editTransCtrl.error == 'amountError'" style="color:red;"><div>Please provide a valid amount for this transaction. The amount must be a numeric value. Also, you may not leave the amount blank or set it to $0.00.</div><br /></div>
+                            <div ng-show="editTransCtrl.error == 'categoryError'" style="color:red;"><div>When specifying a category, you may not specify a category that has not been created through the process of creating a <a ui-sref="budget.list.createItem">new budget item</a>. Also, you may not leave this transaction's category property unspecified.</div><br /></div>
                         </div>
                         <div style="margin-left:30px;">
                             <a ui-sref="accounts.list.details({ id: accountDetails.account.Id })">Back To {{accountDetails.account.Name}} Account Details</a>
